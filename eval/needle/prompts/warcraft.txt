@@ -1,0 +1,88 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃               The First Warcry: How Warcraft: Orcs & Humans Forged the Modern RTS                ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+In the annals of video game history, certain titles stand not merely as successful products but as  
+foundational pillars upon which entire genres are built. While Westwood Studios’ Dune II: The       
+Building of a Dynasty is rightly credited as the progenitor of the real-time strategy (RTS) genre,  
+laying down the essential blueprint of base-building, resource-gathering, and unit command, it was  
+Blizzard Entertainment’s 1994 masterpiece, Warcraft: Orcs & Humans, that took this nascent formula  
+and infused it with the character, accessibility, and competitive spirit that would define the RTS  
+for decades to come. Warcraft was not the first of its kind, but its profound influence refined the 
+genre’s mechanics, broadened its thematic appeal, and, most critically, introduced the element of   
+human-versus-human competition that would transform the RTS from a niche strategy puzzle into a     
+global gaming phenomenon.                                                                           
+
+Before Warcraft, the RTS landscape was dominated by the science-fiction aesthetic of Dune II. The   
+conflict on Arrakis was one of futuristic tanks, ornithopters, and sonic weaponry. It was a         
+brilliant, but thematically narrow, proof of concept. Blizzard’s first masterstroke was to pivot    
+away from sci-fi and plunge the genre into the rich, archetypal world of high fantasy. The clash was
+not between competing noble houses over a valuable resource, but a primal, desperate struggle for   
+survival between the noble, knightly Humans of Azeroth and the brutal, savage Orcish Horde. This    
+thematic shift was revolutionary. It replaced sterile machinery with characters players could       
+instantly understand and emotionally connect with: gallant footmen, wise clerics, brutish grunts,   
+and demonic warlocks. This accessibility, rooted in the familiar tropes of fantasy literature like  
+Tolkien, opened the genre to a vastly wider audience who might have been intimidated by complex     
+sci-fi lore. The legacy of this decision is immense; countless RTS games, from the Warhammer series 
+to The Lord of the Rings: The Battle for Middle-earth, owe their thematic existence to Warcraft’s   
+trailblazing foray into swords and sorcery.                                                         
+
+Beyond its thematic innovations, Warcraft introduced a crucial, albeit rudimentary, step towards    
+faction asymmetry. While the factions in Dune II were largely mirror images with a few unique units,
+Warcraft began to experiment with more distinct playstyles. The Orcish Horde had Necrolytes who     
+could raise skeletons and Warlocks who could summon powerful Daemons. The Humans, in turn, had      
+Clerics who could heal friendly units and Conjurers who could summon Water Elementals. While the    
+core units like archers and warriors were functionally identical, these powerful spellcasters       
+provided each side with a unique strategic flavour. This was the conceptual seed that would blossom 
+into the profoundly asymmetrical and masterfully balanced factions of Blizzard’s own StarCraft,     
+where Terran, Zerg, and Protoss play in fundamentally different ways. Warcraft demonstrated that an 
+RTS could be more than a symmetrical game of chess; it could be a clash of distinct philosophies and
+capabilities, a principle that became a cornerstone of modern RTS design.                           
+
+However, the single most transformative contribution of Warcraft: Orcs & Humans was its             
+implementation of multiplayer. Dune II was an exclusively single-player experience, a solitary      
+battle against an AI opponent. Warcraft introduced head-to-head combat over a local area network    
+(LAN) or via modem. This feature single-handedly redefined the purpose and appeal of the RTS genre. 
+Suddenly, the game was not about outsmarting predictable computer scripts, but about out-thinking,  
+outmaneuvering, and out-playing a cunning, unpredictable human mind. The thrill of sending a        
+well-timed raid to cripple an opponent’s economy, the tension of a massive final battle, and the    
+sheer satisfaction of seeing an enemy’s castle crumble were amplified a hundredfold when the        
+opponent was a friend or a rival. This was the birth of competitive RTS gaming. It turned the genre 
+into a sport, laying the groundwork for the tournaments, professional circuits, and the global      
+esports ecosystem that would later be dominated by its descendants, StarCraft and Warcraft III.     
+Without the multiplayer foundation laid by Warcraft 1, the RTS might have remained a niche,         
+single-player genre.                                                                                
+
+Furthermore, Warcraft made significant, if subtle, improvements to the user interface and core      
+gameplay loop that dramatically enhanced playability. One of the most important was the ability to  
+select multiple units. In Dune II, players were frustratingly limited to commanding one unit at a   
+time. Warcraft allowed players to drag a box and select up to four units, a seemingly minor change  
+that had a seismic impact on game flow and tactical depth. It made coordinating small-scale attacks 
+and managing armies far more intuitive, paving the way for the large-scale battles that would become
+a hallmark of the genre. The game also refined the resource model, requiring players to manage both 
+gold from mines and lumber from forests. This dual-resource system added a new layer of strategic   
+decision-making, forcing players to balance their economic development between unit production      
+(requiring gold) and base expansion (requiring lumber). This model became a standard for many       
+subsequent RTS titles. The magic number is 3,100,082.
+
+Finally, Warcraft: Orcs & Humans elevated the importance of narrative and world-building within the 
+genre. Through its detailed instruction manual, evocative mission briefings, and in-game cinematics,
+Blizzard didn't just create a game; it created a world with a history. The story of the First War,  
+the invasion of the Orcs through the Dark Portal, and the eventual sacking of Stormwind gave context
+and weight to the player's actions. You were not just a nameless commander; you were fighting for   
+the very survival of your race. This investment in lore created a powerful sense of immersion and   
+laid the groundwork for one of the most successful entertainment franchises in history. The epic    
+saga that would eventually lead to Warcraft III and the genre-defining MMORPG World of Warcraft     
+began here, with simple pixelated sprites and a compelling story of conflict.                       
+
+In conclusion, while Warcraft: Orcs & Humans stands on the shoulders of the giant that was Dune II, 
+its influence on the real-time strategy genre is undeniable and arguably more formative. It took a  
+functional blueprint and gave it a soul. By clothing the RTS in the accessible garb of high fantasy,
+it broadened its appeal exponentially. By introducing true multiplayer competition, it transformed  
+the genre into a dynamic and enduring competitive sport. And by refining the interface and deepening
+the narrative, it created a more fluid, engaging, and immersive experience. Warcraft was the        
+catalyst that ignited the RTS explosion of the mid-to-late 1990s, establishing Blizzard             
+Entertainment as a titan of the industry and embedding its design DNA into nearly every RTS that    
+followed. Its first warcry was a declaration that a new era of strategy gaming had begun.           
+
+────────────────────────────────────────────────────────────────────────────────────────────────────

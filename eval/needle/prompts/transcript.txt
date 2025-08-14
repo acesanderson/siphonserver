@@ -1,0 +1,1015 @@
+Aesthetically, Lua is super ugly. I hate looking at Lua. Uh I don't particularly like enjoy the same
+way. >> You just run You just run terminal. >> Okay. So, and >> you put the name of our company in 
+there. No, I'm just kidding. >> I I'm I'm waiting after I do this. I know someone's going to make 
+this package an Emacs. Okay. So, I'm I'm giving away competitive advantage here. Okay. This is This 
+is new tech. I was really hoping you were going to say edit, you know, edit videos, edit music, edit
+text. Those are all the things that I don't do inside Emacs. But if you're like, "Oh, it just every 
+time I open Neoim, it auto updates, it pulls the latest NeoVim update and pulls the latest lazy 
+thing." Possibly from the same day. Nobody's had time to sync those up together. >> You're touching 
+a sore spot for me right now. TJ, >> I know I am. I know. I'm helping. I'm helping, Greg. I'm 
+helping. >> I know. I appreciate, you know, he's a kind of a controversial person. Are we still 
+recording? Are we still live right now? >> Yeah, we're live. or >> but time to take this private. >>
+Yeah. Yeah. >> If you're listening to this as a podcast, remember that it was originally recorded as
+a video. If you're not following along, you can go to my YouTube channel. And if you want to support
+me to keep this podcast going, you can donate in Kofi. I'm going to leave a link in the description.
+So, let's get started with this chapter. Then, there's a discussion going on between the only two 
+editors out there that matter, and those are Neoim and Emacs. There's other editors out there as 
+well. I don't know. Cursor is the only one I know. I have never installed it. Have never used it. 
+But um >> ED is another >> Oh, yeah. Yeah. I actually just handed the CEO of Curser uh the Neoim 
+help manual printed out. First page of it yesterday. Not joking. >> Really? >> Yeah. When I was in 
+San Francisco, I handed him a signed copy. And by the way, thanks for showing up, TJ, because um >> 
+we were missing a guest, so I reached out to TJ and uh he accepted. Really appreciate it. I also 
+want to apologize with the rest of you because I have to reschedu like I don't know four or five 
+different times. There was a lot of back and forth. So, apologize for that, guys. And um what are we
+doing? We're just going to discuss, you know, friendly talk about the different the well the two 
+editors. Okay. So, um let's start by introducing each other just in case there's someone in the 
+audience that doesn't know who you are. Um two minutes. That's what I have in the in the agenda 
+here. Introduce each one of the guests. Um demos. Each one um of the guests is just going to talk 
+about the tool that they use. five minutes each approximately or seven minutes that's going to be a 
+total of 30 minutes around that experience if you have experience with the opposite tool or not and 
+uh what would you recommend someone starting with um with all this new Emacs why and uh if there's 
+other editors that you would recommend right so let's just start with u introductions TJ let's let's
+go with you >> cool uh I'm TJ Dere Uh you may see me around as THDV. Uh I'm working at terminal.shop
+these days. We do coffee through the terminal. You can buy it. SSH terminal.shop. Um and we also do 
+a lot of other stuff. I work with the Prime a lot on making videos, hosting events, and doing random
+programming stuff. So you'll see us uh I think if you didn't see us in the tower earlier this year, 
+we built a video game in a week in a water tower. Tower defense game in a water tower. So there you 
+go. Um, and we're going to go back to that later this year, so you can keep your eye out for that. 
+>> Are you the CEO of terminalshop, teach or? >> We've got a lot of them. We've got several. Yeah. 
+>> Okay. Awesome. Now, we also have DT with us. >> Yeah. My name is uh Derek DT. Um, the channel on 
+YouTube and Odyssey is Dro Tube. I typically talk about Linux related topics, freed open source 
+software, lots and lots of videos over the years on Vim and Emacs. So, probably a hundred on each. 
+So, like lots of stuff. Um, of course, various shell utilities and scripting and a lot of nerdy 
+stuff and some fun stuff as well. I have spammed the YouTube algorithm, so you might have seen me in
+your search results. So, that is the goal. That's the game I'm playing. >> I want to thank the first
+person that got the CEO YouTube membership. That is Web23. You should be able to see the name 
+somewhere around here alongside with the website. So, if you want to support me and my family so 
+that I can keep making these videos, I'm going to leave a link in the video description. You can 
+consider becoming a YouTube member. You get different perks with the different memberships, but if 
+you become a CEO, I have to say your name on the credits of each one of the videos. But that's not 
+the only one. I have different levels. Each one of them supports and keep the channel going. Let's 
+see if we can get the heart out. Where is it? There we go. All right. So, let's jump back to the 
+video. Awesome. We also have Greg with us. Yep. Hey, I'm Gregory. I'm uh I'm here because I'm on the
+NeoMim Core maintainer team. I I've been involved with Neoim as a project for it's been about four 
+years now, which is kind of crazy to think about. Um I've been using them for that full-time for a 
+lot longer. Um I unlike the I think a lot of the other guests, I don't have a huge online presence, 
+I guess. Um, I spend time in DM CS a lot and on GitHub and and things like that. I do have a blog 
+that's linked in my little description bubble somewhere over here. Uh, where I occasionally write 
+tech related stuff. Um, it's very it's not very like regular. Um, so if you're an RSS subscriber or 
+something, you might get one every couple months or something. But, uh, yeah, aside from that, I 
+work um, my my background in in software engineering has been a little bit varied. I started out 
+doing like web development for a technology consulting firm like uh JavaScript front ends and Java 
+JSP back end stuff. Um most kind of my roots and then I went almost full into the other direction 
+and went started working in like electrical engineering uh FPGAs embedded low level embedded stuff 
+which I ended up really enjoying a lot and I'm currently somewhere in the middle doing systems 
+engineering at CloudFare um which I'm also really enjoying. So, uh that's what I do during the day 
+and then my open source stuff is uh keeps me busy in my free time. >> And what do you do in the 
+Neoim team like what are your contributions or what >> uh honestly a little bit of I've kind of 
+touched a lot a little bit of everything. Um like LSP and Tree Sitter are probably some of like the 
+more user facing stuff. I would say probably my my main contributions though are the stuff that I 
+really enjoy the most is anything that's related to the terminal. So Neov especially in the last 
+year or two I think has seen a lot of improvements and new features related to um new terminal 
+standards which we'll talk about I'm sure. Um, and that kind of dubtales nicely with also another 
+project that I'm involved with um, Ghost Die. Uh and that's been a pretty beneficial relationship 
+because as uh Neoim is a fairly popular journal based text editor and ghost is a fairly popular um 
+terminal and so there's a lot of overlap between these two and it has happened a lot of times where 
+um if you find a bug in Neoim through Ghosty like helps me helps me triage the bug quicker and then 
+also as we develop new features in [ __ ] I can test them in Neo and vice versa. A big problem with 
+with the terminal stuff is like nobody want it's there's not like a real standards body. The way 
+that new features develop is someone proposes something and then you kind of have to get like 
+agreement with other terminal emulators or applications say yeah we want to do this and you see this
+a lot where someone propose something and then other people say okay it sounds nice but who 
+implements this right like as terminal emulator author no applications do this so why would I bother
+and as a as a terminal application author you say well no terminal support this so why would I 
+bother and so you kind of creates this boot trapping problem so with me double dip thing in Ghosty 
+and Neoim. We've kind of found a hack around this because I can just say, "Yeah, Ghosty creates this
+new feature. I'll just go and wins in Neoam." Like, you know, no problem. >> We found out the answer
+was Greg both times. That's the answer. Who writes this? No matter what, it's always Greg. >> And so
+contributor in both of the projects like are you really active in Ghosty as well? >> Um I used to be
+a lot more. So I'm still on the maintainer team. I still technically have the ability to do like 
+merge PRs and stuff. Although I I don't I don't do that very often these days. Um I try to stay 
+involved with like the discussions, but between working full-time um working with Neo and this 
+personal life stuff uh don't have as much time today as as I used to. Also, frankly, it's kind of a 
+testament towards Ghost's maturity because a lot of my contributions to Ghosty in the early days 
+were just I was using this new terminal and I was like, "Oh, it doesn't have this feature that I 
+want." So, I would go just implement it and that would be like my contribution. And I just did that 
+enough times to where I was like develop trust and credibility in the community. But today, Ghost T 
+is like, as far as I'm concerned, it's perfect. Like, I have zero complaints or feature requests. It
+just does exactly what I want. So I was like, well, I don't have any real strong motivation to >> 
+demug sessions >> to >> we need sessions. >> Yeah. I I didn't say it's perfect for everybody. This 
+is perfect for me. Like for what I need to do, it does everything. So I I'm kind of just like, all 
+right, this feels done to me. So I'm being a little selfish. Um it's in very good hands. I mean uh 
+the the other maintainer team is incredible. So my my uh reduced contributions certainly are not 
+having a negative impact on the project. >> Awesome. Okay. Thanks for sharing that. We also have 
+Joshua Blaze with us. Hey >> everybody, I'm Joshua. When are you shipping coffee to Canada? Tee. >> 
+We tried and like I'm not joking like 25% of them just disappeared in customs. >> So we we did try. 
+We have to find a Canadian roster. So as soon as we do I can let you know. I'll let you know. >> 
+Yeah. Keep me posted because I I looked at ordering the other day. Yeah, I'm Joshua Blaze. I uh I 
+use Emacs. I uh clearly I've written some stuff on it on the internet. Um >> and uh written a book 
+in it actually and uh program day-to-day in it. It's uh it's kind of taken over my computer almost 
+holistically. So, it's literally how I use a computer. Um I am the Emacs meme in that it has 
+essentially taken my entire life. And uh yeah, so that's why I'm on this stream. >> Oh, but you had 
+an adventure with Neo of him. Are you ashamed of that? >> Ah, yes. Yeah, I I I did um about a year 
+ago. I made a video about why I left Emacs and I quickly recanted because uh >> it's just not the 
+same. It's just not the same >> issue, as Prime would say. >> That's funny. >> All right, thanks 
+everyone. So um I think we can talk u a lot about each one of the tools but words are not going to 
+do justice or not going to you know help people take a decision. So that's the goal you know just if
+there's someone watching this they hear about both of the editors new Emacs they don't know where to
+start they don't know which one to use. So, if you guys can show each one of your setups, that's 
+that's the goal. We're going to do it interactive and uh people as viewers can take their own 
+decisions, you know. So, why don't we start with that? You want to go first, teach? >> I want Greg 
+to go first. >> You want Greg to go first? >> Yeah. I want Greg to go first. >> I want to see how he
+can use any of him these days so I can steal some tricks. >> Okay. Greg, want me to switch it to 
+your screen? >> Let's do it. >> All right. Can see it. >> Okay. So, yeah. All right. So, this is 
+Yeah, I'm sure I don't have to explain to any of the people watching this what we're looking at 
+here, but this is a terminal emulator. Of course, this is Coasty as we talked about. Um, I guess, 
+uh, like any VM or DVM user will kind of say like, um, NEM today and VM2 can do quite a lot. It's 
+it's become extremely extensible and it really is it's a platform um not too dissimilar from Emacs 
+but the way that I use NM and I think most users do is that primarily as a text editor inside of uh 
+the shell and kind of the the terminal based ecosystem as like a broader IDE. So anyone who uses Neo
+member Vim also probably has a lot of opinions about their shell and what shell they use and how 
+they use it and stuff and I'm I'm no different. I use fish. I'm a big fan of fish. Um uh I don't do 
+anything super fancy. I just have the same shell prompt uh that I've been using for forever now. 
+It's the same one that like everyone else uses apparently. I didn't realize that when I saw it. I 
+was like, "Oh, that looks nice." And I started using it and then I would watch other people like 
+share their screens or or like do YouTube videos and I found out, you know, everyone uses this, I 
+guess. So, um I guess I'm just I'm just very basic that way. Uh, I did write it myself though. I 
+know I'm not talking about the right now. I will. I promise. Um, but my my fish prompt I I did write
+myself. It's like adapted from other ones, but I really disliked all like the the built-in get info 
+stuff was like super laggy on like the default ones and some ones I looked at. So, I like I do like 
+this extremely overengineered uh fish prompt that I won't walk through this because this is not why 
+we're here, but it's like it's like almost embarrassing that they have like 200 lines of code just 
+for uh my prompt. And it's like only because I was like obsessed with making it like I wanted I 
+wanted zero delay between like I want to be able to like spam enter and there never be a delay with 
+like the get prompt. The irony to all of this is that I now use um Jiujitsu in instead of Git. And 
+so I don't even include my Git info, my prompt at all anymore. So all all of that engineering effort
+is is uh is wasted. But I the one place I do still use git and not judu is my do files. So you can 
+see it here. Um I have like my my branch, but it's like see I can like hold this down and there's 
+never any delay. So I'm very proud of that. Anyway, um yeah. So I I use uh fish as like my shell and
+that's like my primary development environment. Uh and then yeah there was my editor. So I don't 
+really have anything planned I guess. Um I'll talk about like so when I start Neo this is what I 
+see. This is kind of what my setup looks like. Um I have my little LSP notifications in there. 
+Fairly basic status line. Uh nothing too crazy here. I I've been using Nord as my color scheme 
+forever. I I really hate I I hate working with color schemes. Like I know some people like love 
+super color schemes every week. I literally cannot think of anything less fun. I hate it so much. So
+I found one that's like good enough for me and has like built-in presets for a lot of different 
+things >> and and I just and I haven't changed. And Nord is a little bit it's like very blue 
+sometimes. I feel self-conscious about how blue it is when I'm like sharing my screen or something. 
+But I like that it doesn't have a ton of colors. It has like it's a it's a fairly low contrast. It 
+only has a few different colors, which I like. Um I've noticed >> I've noticed that most people use 
+low contrast themes. Mine is pretty high contrast. Mine leaves you blind. If you look at my screen, 
+just look at those colors. But I guess >> yeah, >> that is not so popular, right? >> Oh, I can't 
+stand low contrast. But my eyes just can't handle it. >> Yeah, for sure. I think high contrast is 
+better from like an accessibility standpoint. Um, for me, it's not really the like the low contrast 
+that I like. It's just the the few colors. Like it if there were more contrasts here, I don't think 
+I would mind. It's just that I like that there's only like three or four colors when it seems like a
+lot of popular color schemes today have like close to a dozen. And and I and I'm like I don't know. 
+I guess one of my like medium spicy takes is if your color scheme has like the point of a of a color
+of syntax highlighting is to quickly draw your eye to relevant information to help you visually 
+parse things quicker, right? And if you have too much stuff highlighted, you end up going too far 
+and then it's like it's equivalent to having nothing highlighted because there's not enough visual 
+distinction. Um, but I don't know how many other people share that opinion. It might be might be a 
+um a boat that I'm in by myself. But anyway, um yeah, so I I just I use Nord. Pretty basic setup. I 
+I will say like the way that I use NEM today is I think would look familiar to an old school Vim 
+user, right? Like uh I I I used Vim years for years before I used Neoim. And I think that really had
+a big influence on kind of my the way I think about it as a tool and how I use it and how I like to 
+use it. Um, so I I don't have a lot of like I eye candy. I do have some for sure. Uh, but um I I I 
+try to stick to like them paradigms and like the default them way so to speak of doing things as 
+much as I can. Um, so that's a big like uh if one can have a philosophy of text editing, I guess 
+that's mine. Uh, so when it comes to like how I have nem configured, um, I have a lot of custom 
+stuff, right? Like all of these directories full of files. Um, even my my plug-in manager is just 
+like this little shell script that I wrote. It's like a 100 lines. This is all I have as far as >> 
+You don't Okay. Okay. Okay. >> You don't use lazy BIM? >> No, I don't use lazy. I I don't know. I I 
+guess like when I when I switched to So, like when I was using Vim, I used I don't know Vim Plug and
+then I used Minpack for a little bit because I liked how just simple and and dumb it was. Like the 
+way you install plugins in Vim and I know it's a little bit different in Emacs. Um my experience 
+there, but like in Vim, all you have to do is clone a repo. Like you put some files in a certain 
+directory and then it's installed. That's it. So, I was looking at like I I don't want to like call 
+any any names out or I don't want to like name and shame or anything, but I was look I was looking 
+at these different plug-in managers for Neoen and they were like hundreds and hundreds and sometimes
+thousands of lines of code and I was just like why? To me it just felt wrong. I was like this should
+be so simple like it's a it's a plug-in manager for Vim is is basically a fancy git wrapper. Uh so 
+like what if I just wrote one myself as a shell script? like how how simple can I make it and this 
+is all just pix shell that doesn't use any bashes so it works literally on every Unix pix system um 
+and and then and then that's it I don't use a lot of I I'm kind of cheating here my uh >> yeah that 
+is cheating to put mini in there that's like 95 plugins that is a little bit of cheating >> it is 
+cheating I totally I I I don't deny that at all um it is cheating I of these I use like maybe I 
+don't know seven or eight of of mini plugins in here. >> Yeah. I'm waiting for the expose when it 
+comes out like mini andim has like a 100 plugins. It's a little bit kind of false advertising. Don't
+you think like mini just throwing it out there? >> Yeah. I've been trying to get him to do an 
+interview but uh it's tough. I want to ask him a lot of questions. But so mini do you use mini 
+files? >> I do use mini files. I guess this is the mini.pic mini.files too. >> Um I'm a big fan. I 
+like I I like that. Um I like kind of design philosophy with miniim that each of these are each one 
+is is an individual file, right? Like that's it. There's no there's no dependencies. Like it's a 
+very simple. It's very easy to like read and understand if you want to see what's going on under the
+hood. Some of them are pretty big. Like the last time I looked at um mini.pig, I think it was like 
+over a thousand lines long and I wouldn't be surprised if it's gotten even bigger since. But I'm I'm
+always like trying to like delete plugins. like if I can anytime I have the chance to delete a 
+plugin like unironically a lot of my motivation for PRs and work that I done with Neoim has been 
+adding defaults so that I can delete a plugin. Um just cuz I I kind of view plugins as like you know
+I don't know it's like it's like almost a form of like people dead or something with like 
+dependencies and I just I don't like having dependencies I guess. Um, so the these are the ones that
+I use. But what I also like if if many if having many in here is cheating, the fact that I also have
+like how many files do I have in this directory? Okay, I have like several. So I mean I have like 
+you know bajillion of my own custom stuff in here, right? Um, and this is where I think what I do 
+really starts to deviate from your average nom user. Um, because like almost like how good is my rip
+grip? like almost none of this is um let's see can I can I do this from memory no I don't I don't 
+remember the syntax off the top of my head but um oh I can do this I think right I mean I'm trying 
+to find how much of the hair is lua it's very little is the point I'm trying to make almost 
+everything that I have in here is uh fennel so this is just looking in the plugin directory you can 
+see a lot of it is fennel >> what is that fennel >> oh Emacs are going to like this. >> The emacel 
+is a lisp that compiles into Lua. So this is when I configure neoim. This is what I this is what it 
+looks like for me. No syntax highlighting and it's all lisp. So yeah, this is where this is where 
+the emacs people and I are are spiritually aligned cuz >> when I when I discovered lisp, I don't 
+know why, but it just like clicked me so so well and I just loved it. Um >> DT we can convert him. 
+>> Well, I was thinking we're convert we're we're getting Josh back in. Maybe he didn't know last 
+time. >> I didn't know you could still write list and to be in Neov. >> So the way that I have this 
+configured is is uh what I like about it is I can write a fennel file in any location that a Lua 
+file works and it just kind of just works magically. The way that it happens under the hood is I 
+have a tiny little bit of Lua code that sets up an auto command which is like an event handler for 
+people that aren't familiar with Vim. And then anytime that I write a fennel file in one of these 
+special locations under the hood, it it gets automatically ahead of time compiled into Lua and then 
+set written to a a separate directory in the open's runtime path. So that when starts, it actually 
+is still loading Lua files, but all the source code so to speak is um is all in fennel. >> And is 
+there is there a reason for that? Like is it performance related or is it just cuz you like writing 
+lisp? >> A reason for using federal over Lua? >> Yep. >> Oh, I I don't particularly like Lua. I 
+think Well, I should say I think Lua I have mixed feelings about Lua is a better way to say that. I 
+think I think aesthetically Lua is super ugly. I hate looking at Lua. Uh I don't particularly like 
+enjoying >> feel the same way. >> Yeah, I think I think Lua is an excellent example. Get a better 
+color scheme, Greg. No, >> that's fair. >> I know why he likes uh I know why he likes lists more 
+than Lua >> because when everything is a parenthesis, it makes things so much easier. You never have
+to worry about punctuation. >> Yeah. And I have a one of the plugins that I that I wrote and that I 
+still maintained is a par infer plugin, which list users are probably familiar with that. like uh 
+that makes writing list in in here so much easier cuz like um let's see if I can if I can 
+demonstrate this but like as I write you can see the parentheses are autocompleted and and are um 
+not only autocompleted but like auto adjusted uh so like I don't know I'm just like writing random 
+crap here but uh you know >> you know what would make writing lisp super nice writing it in a lisp 
+environment. M yeah, >> that's what I was going to ask Gregory. Maybe >> Neoim is not the answer for
+you. >> Well, I will talk about that um when the time comes, but I do have uh another I do have this
+plugin fennel ripple which which kind of creates it's not anywhere close to Emacs. I'm not claiming 
+that it is, but it does kind of give you that interactive. So this lets you like interact with 
+Neovam and um it kind of turns Neoam into a a panel interpreter. Um so it kind of gives you the the 
+the little bit of this the itch that that Emac does. And there are other plugins that do this too, 
+right? Like mine is not the only one. It's just I have when it comes to stuff like this that I do 
+for fun, I have like severe NIH syndrome and I like just I like doing this for fun, right? So it's 
+like I'd like to do it myself and see if I can do it in a way that's simpler or um and fewer lines 
+of code myself, right? >> Yeah. >> How many hours do you say you put into your neoim configuration 
+and you know tinkering with Neoim and all that? Has it been years of playing around? >> Yeah, it's 
+it's it's over the course of many years, right? Like I actually don't change it much anymore. Um 
+what what happens is is I'll just be using it to like do my day job or whatever, right? Or to um 
+like fix some bug in and they'll be like I wish I could do I wish I could do this, right? Um like 
+just recently an example of this is at work we use TypeScript and I was I was working with the 
+TypeScript file and uh I used the TypeScript language server in LSP and it works really well but it 
+doesn't integrate with prettier which is like the JavaScript or TypeScript formatting tool. So I was
+like okay I'll just write a little snippet of them that when I open a TypeScript file it will uh it 
+will like traverse the the file structure find like the prettier RC file if there is one and if 
+there is automatically set the formatting program right like stuff like that I was like this is 
+useful to me so I just sat down and and um and wrote that and so that's how this file was born for 
+instance um so now when I like open up a TypeScript file And there's a prettier RC somewhere in like
+the file structure. It sets the format the format program options so that I can auto format uh 
+TypeScript files. >> So it's like stuff like that. It's like okay, I have this need to do something 
+and and I just write the code to do it. And to me, this is like what makes both NeoMen and Emacs to 
+like this is what's so addicting about these these editors is that they're fully scriptable, right? 
+Like, and I know TJ has coined the term like your your personal development environment, and I I 
+100% agree. That's like why people I think I think that's why people get intimidated by them and 
+also why people are so addicted to them, right? Is because once you kind of once you kind of break 
+through the initial pain and get over the initial learning curve and you figure out you you you 
+learn how to make it effortless to just adapt this tool to like fit you like a perfect glove. Like, 
+why would you ever use anything else? you know, it's >> nothing nothing beats that. Um, but it's 
+stuff like stuff like that just has just accumulated over years and years and years of using this 
+tool and that's how all these files come from. Like I have my own grab implementation that I wrote 
+that's asynchronous because the built-in GRP is crap to be frank. It needs to be it needs to be 
+replaced but that's a really big project. No one's doing it yet. Um, so like if I just do this then 
+I mean that was grant grant this is a small repo so it's it was um going to be fast no matter what 
+but like in a huge repo like the Linux kernel or something if you run grap synchronously you're 
+going to be sitting there waiting for a very long time whereas if you run asynchronously and hook 
+into the new event loop you can kind of stream in results as they come in. So just stuff like that 
+right it's just very much like a build your own tools kind of situation. >> Okay. Okay, awesome. 
+Now, let's try with um one of the Emacs guys. Now, wants to wants to go first. DT, >> you want to go
+first? >> Sure. >> All right, let's go. Let's see what you have. So, my stuff doesn't change all 
+that often because over the years I've gotten things to the point where I don't really configure 
+much. Uh, like my Emacs config if I need to zoom in. So, >> you had to show the variable font size, 
+right? You had to do it. >> Uh, my config.org or those 1100 lines a little more than 1100 lines but 
+it is because I'm a content creator I don't create my configs necessarily for me and this is the 
+same for everything I do my shell configs my window manager configs like with Xmoonet and QL my 
+configs are massive and that's because I I put them out there mainly for documentation for other 
+people I could easily remove half the stuff from my EMAC config and define So, that's one thing. Uh,
+as far as for people that are new to Emacs, uh, you mentioned the variable font sizes. One thing 
+that many people are confused with, uh, if they're not familiar with what Emacs is, many people 
+assume it's a terminal because it's all textbased, but it's not really. It's actually, uh, a 
+graphical program. It's actually a GTK program. Uh, and it is mostly textbased, but because it's a 
+GTK program, I can get images in it. I could I could go to a website right now if I wanted to. 
+There's a built-in web browser um called EWW here and I could go to my website which I never update 
+but here is distro.t and you see get images right any images I would have had on the page would have
+come up just because that's the the nature of Emacs. So you get variable font sizes and cool unic 
+code symbols and images. I can I can use this as a PDF reader for example because again graphical 
+application. If you're stuck in a TTY like you don't have a uh Xserver or Wayland server and you 
+were stuck in the TTY you can launch Emacs inside a terminal you're not going to get any graphical 
+stuff obviously without a graphical server running but you can run Emacs in the terminal. That's not
+typically what people are trying to do. They're trying to use the real Emacs which is the graphical 
+program. Now, why EMAC over something like Vim or Neo Vim? Um, I I often use Neoim on my videos, 
+like when I'm doing things like with uh teaching people certain shell commands, you know, I just 
+pull up a terminal and I'll launch Neoim. Why do I do that? People often ask. They'll see me using 
+Emacs on one video and Neoim on another. If I just used Emacs all the time for everything, all the 
+questions I would ever get are Emacs related. People just, "Hey, what's that program you just 
+launched?" And I don't you don't want it to be pushing Emacs on everybody. I'd like to, you know, 
+show them a little bit of everything. But the difference between Emacs and Neoim really is Emacs is 
+a it's its own like self-hosting environment because Emacs is really a programming language, Emacs 
+list, and it's an interpreter for that language. It's not really a text editor. like, yeah, I can 
+edit text in this thing if I want to, but it's really a programming language and an interpreter. And
+any program you write using that language, Emacs interprets it. And we've got a million things like 
+I could launch this here. This looks like a terminal. It's actually the ES shell. It's a EMAC 
+window. That's the eShell. It's a EMAC shell written in EMAC lisp. It's not bash. It's not fish, 
+right? You would think it's running like a standard like Unix like shell, but it's its own unique 
+shell. And the cool thing about Emacs when you write these EMAC list programs is Emacs is 
+crossplatform. So works on Windows, Mac and Linux. So you can actually use the eShell on Windows 
+where you might have a problem running, you know, the fish shell on Windows, for example, inside 
+Emacs or man pages, right? I can actually run a man command here uh and get a man page for 
+something. For example, maybe I want to read the man page for ls. Um but you know you would have to 
+have the man database on a system which for people running a Unix like operating system would be 
+fine but we have this really cool alternative in Emacs called woman. So you get a woman page and I 
+could actually read this. And because this is not dependent on a man database, it ships its own kind
+of database. Everything's written in Emacs list with woman pages. You would get woman pages on a 
+Windows machine too if you used Emacs where obviously you're not going to have the man pages 
+available to you. So uh it's just a a different way to do things. Also, you know, with the way Neoim
+or Vim or any terminal based editor works is you you open a terminal and then you do something with 
+that terminal. I don't know, you open my bash RC here and this is neoim even though I typed Vim. 
+It's an alias for Neovim and you know, you do what you do. Then you get back out to the shell. Uh, 
+and the problem is you don't anything I do in the shell, like I run some commands in the shell or 
+whatever, uh, inside Vim or Neov, you have buffers, but those buffers are for when you're inside 
+Neoim. Well, when I get back out to the shell and go back into Neoim, this ls command or whatever it
+is, it's not part of the buffers, right? But in Emacs, you start by launching Emacs and you 
+literally do everything at from that point inside Emacs and everything you do is an Emac buffer. 
+Doesn't matter what I do. I open a terminal. I've run htop inside that terminal inside Emacs. I I do
+the web browser. I do the Maggot uh get client, whatever it is. And you know, I'll have a hundred 
+buffers open at some point, maybe 200, you know, if I never close any of them, which many people 
+that use Emacs typically don't really like ever kill their buffers. So, you'll have hundreds of them
+open, so you can quickly switch between them. Um, so it's a different kind of workflow that confuses
+people when they switch especially from Vim to Emacs because they're so used to opening that 
+terminal for everything and then it confuses them because they don't really need a terminal for 
+Emacs but they need terminal for other things and well in EMAC you have the terminal inside Emacs 
+where in VIM film runs inside the terminal so it's like everything's kind of turned on its head and 
+it really confuses people's brain when they Twitch. >> Yeah, definitely. Awesome. Thanks, DT. Now, 
+let's jump to uh Neoim, so we go oneonone, TJ. >> Sure, that sounds good. All right. Um, I mean, 
+Greg showed like a lot of good stuff throughout Neo. Obviously, it's got all the stuff you expect 
+these days with like LSP and Tree Sitter and stuff like that. We do actually have, you know, 
+terminal inside of uh Neovim here, too, you know. So, we can run the terminal inside Neovim. And 
+this is just a regular, you know, neoim buffer. So if I wanted to, you know, like uh I don't know, 
+block select or something, I can still do that. So that's nice. >> How do you do that? >> That's 
+actually how >> what >> how do you do that? >> You just run you just run terminal. Oh, >> okay. So 
+and >> you put the name of our company in there. No, I'm just kidding. >> Um >> and you can select 
+text like in a Neov buffer, right? >> Yeah. So it has terminal mode where you like type stuff, 
+right? I'm just typing stuff. But then when I when I escape out, I'm in now I'm in normal mode 
+again. So I can so I can navigate around just like I would modally generally speaking with the new. 
+So these are just like tabs inside of one Neoim instance. That's actually how I do like pretty much 
+all of my like dev stuff. I I don't have anything like against T-Max or something. And I know 
+there's some people that have like I don't know they have like vendettas against like multiplexers 
+and stuff but like I just never have I just never needed it when I started writing code. I like 
+started basically with Neovim when it was first coming out and I was like this is really cool. It 
+blew my mind. You could like write code and change what your editor was doing and I was scared of 
+the parenthesis in Lisp. Oh that's an overrated concern guys. You don't need to be worried about 
+it's the same number of parenthesis. Okay so think about it. Okay it's the same number. So that was 
+not a good reason not to do it. But um but yeah, so I just never really got started on T-Max and so 
+I just started using like the terminal inside of Neovim. So that's how I've pretty much always done 
+it. But it is kind of like it's backwards for how a lot of people use uh use Neoim. But I like that 
+I can script it. like I can send stuff if I need to to the terminal and do all the other stuff which
+I'm sure a bunch of like Emacers also like that you can oh I'm going to highlight this and send it 
+over to this or I'm going to pipe that command back into like an output or whatever. Um I think all 
+those are fun. So, so yeah, so there. Yeah, go ahead. >> Just a question. Now, you mentioned T-Max, 
+right? But >> the reason I use T-Max is prime because I watched his video how he was using T-Max. I 
+I didn't even know how to use T-Max only remote servers. But >> the way he uses it to switch 
+sessions, right, with that shortcut, >> I just jumped to the sessions. How do you navigate between 
+different projects like GitHub repos? >> I've got like I've got nine desktops right here. I'll just 
+have a different I just have them stay I this is my desktop I leave it on forever. So, like if I'm 
+working on something, I just leave it on whatever number it is, I'll leave it on number four, but I 
+got a different project on on number four just hanging out there waiting for me to come back to it. 
+>> Another terminal instance, right? >> Yeah. Yeah. I just open up another like I'll just, you know,
+if I was like, oh, I want to go work on another project, I'll just open a new Ghosty. Shout out 
+Ghosty. Right. I I you know, maybe I go and I open this up and now I'm now I'm editing my Elixir 
+project, right? So, like now now I'm Whoops. Now I'm here on like router. So, I'm just doing this. 
+>> Yeah, we can do that. That's fine, right? And then uh like then if I'm done with that one, I'll 
+just go back to here. So I just switched I switch desktops. >> Okay. And do you keep track of Okay, 
+I keep this project always in desktop one and >> No, because I don't switch projects like every two 
+minutes. So it doesn't bother me. Like I work on a project mostly for like a day or a few hours, 
+right? So it's like I mean I usually can kind of remember cuz it's like not I don't have that many 
+projects happening at once. But yeah, and then I also like that cuz if I want to open like the 
+browser for this one and I have, you know, of course 37 tabs as software developers tend to do, 
+right? Like then I they're all grouped with the same Neoim like session, right? So yeah, so it's 
+like that's so that's for me that's kind of the workflow that I do for those. And then like I said, 
+so I do all I like, you know, I open up my terminal inside of here. If I want to do like random get 
+commands or I want to check something or I want to grap or whatever, I'll just do that all all here.
+You know what I mean? I can if I need to do something with it, I can grab them and paste it or 
+whatever. So So we we do we do have that going on. So I don't know if any EMAs out there didn't know
+that, you know, worth worth giving a shot. So but the the thing that I wanted to show that's kind of
+funny, um I mean we've got all the fun stuff. I I know that um I think I forgot which or is it just 
+theme? Is it Oh, it's this way. So, I copied Ivy. Here you go. So, if you're missing Ivy cuz I I 
+wrote Telescope a long time ago. Other people have been working on it. I haven't done very much with
+it in a long time. For me, it's finished software. Like I haven't I haven't changed it in forever. 
+But I I I stole some Ivy ideas, too. So, if you like that, you know, we've got >> from from Emacs. 
+>> Emacs. Yeah. It's a completion framework. >> Yeah. So, Telescope has ways of doing different 
+themes. Like this is the same fuzzy finder, but it's just different themes of like ways of 
+presenting it. These are neoim like real neovim buffers. This is all inside of neoim, right? Like to
+get proper highlighting and you can I'm scrolling with my mouse wheel right now case that's cool. 
+Like all that good stuff, right? And and you can do those and and then it has it for like 
+everything. If I, you know, call a function that doesn't exist, we could do like teles telescope 
+diagnostics and it will, it'll find that. You can search for all of the things that you have in your
+project and jump between them and do all that good stuff, too. So, it's a generic fuzzy finder like 
+experience, right? You can pipe anything into it and and people do that. But the thing that I kind 
+of wanted to show just as like a fun a fun like thing of I feel like this is something I I'm I'm 
+waiting after I do this. I know someone's going to make this package in Emacs. Okay. So I'm I'm 
+giving away competitive advantage here. Okay, this is this is new tech. Um I wrote that it's I can't
+decide if this project is actually a joke or not. It's just kind of a funny idea that I had a little
+bit ago which is like I have a dynamic environment, right? I can like execute Lua files. Uh like 
+LLMs can produce code. Uh we can save the code when they're done. So what if we did something where 
+we basically make like a Lua module. In this case, I have this little module and anytime I call it 
+with like the name of a function that uh like exists already. So I have examples and I have add 
+numbers here, right? And it has some a bunch of random stuff in here. Not too important. What's 
+going on? Then it will just call this function. So if I call if I if I uh execute this file here. 
+Oh, that's sorry that's that's for later. I got to comment that part out. That was cheating. We'll 
+come back to that. Um, if we print calling adding these numbers, right, it'll just print 15. Like, 
+no surprise. That's because there's real code there. We don't have to, we're not asking any LLMs 
+what 5 + 10 is. We asked it to write code that would take in these arguments, right? And so, if I uh
+if I like go to my Lua code here and I delete add numbers like this, I think it was going to say, 
+oh, I'm going to generate a new function. It's calling to an LLM. It just asked Anthropic to write a
+new file. Now it saved it and now it's there. It keeps the history because what you can also do is 
+you could say something like this where you say uh hey I want to improve this example of add 
+numbers. It should optionally include like a middle um which I think this still works. I actually 
+don't remember if I I I didn't I didn't check this. I was on a plane. Okay. Today uh okay that part 
+didn't work. The improve part didn't work. I don't know. I'll have to go back and check that part 
+later. But there is a way to like iterate on the LLM's answers. So if it does something you don't 
+want it to do then then you can ask it again. So if we do something instead like X um make a cool 
+floating window and then I pass the things like uh yeah that's good title hello world 2 file type. 
+Yeah sure. Why not? We'll do this. It says I don't have this function right now. It's going to ask 
+claude give me give me that function and it's going to generate a bunch of Lua code and then oh 
+please no it didn't work. Oh it did work. It did. It did. It did. I forgot to press enter. There you
+go. And it changed the background color to green, right? So, it changed everything and it uh it 
+wrote the code for me. So, I have the most dynamic editor of all time. I can communicate to it in 
+English and it will make the functions for me. And it will do like insane stuff. I asked it to do 
+one where it said um generate a dad joke in place in a floating window. And it it actually goes uh 
+Whoops. I open I got Yeah, here you go. What did the drummer name her twin daughters? And a one and 
+a two. >> Great joke. It It wrote a curl request to an actual dad joke API, pipes it in and gets it 
+back. So that was from the LLM. So I said I wanted a dad joke in a floating window and it did that. 
+Um, so anyways, that was the that was just sort of the fun thing that I wanted to to show of like I 
+think it's kind of fun of thinking about like the editor as this really dynamic experience and being
+able to do very goofy stuff like like this where uh there it's a solved problem. Someone's done this
+already. Like someone's written code to make a pop-up window, but it's it's been done. you even if 
+you can't remember exactly which things it is, it's been done. So like I just ask the LLM, it'll 
+just put it in there. You can check it if you like it. You can edit it. You can do whatever you 
+want. Uh and then you can iterate on it. So there you go. So that's uh that's my Neoim demo for you.
+>> Awesome. How did you do the autocomplete of stuff there? Was that Copilot or what was >> Super 
+Maven? Yeah. So I mean it's like an alternative to that. Yeah. >> Is it good? >> Super Maven guys 
+are cool. Yeah. >> Yeah. >> I was going to ask TJ, was that DWM for your window manager? Uh, I'm 
+using awesome WM. >> Awesome WM. Okay. >> Okay. >> Yeah. I I I literally like I only picked it 
+because like Well, I already know Luis, so that's fine. >> Makes sense. >> Yeah. I don't have a lot 
+going on with it. Um, but yeah, the the only things that I've done that are kind of like some goofy 
+stuff is like write random things mostly for stream that are like kind of hyper specific to like 
+load these three things, put this here, make it in a floating window, put it floating on top, I 
+press it again, it makes it disappear. like that kind of stuff. Um, otherwise I'd probably be fine 
+like with something much simpler. Uh, like >> No, I was actually why I was asking is like it's kind 
+of surprised me if you were on DWM because >> cuz why awesome because awesome is you'd probably like
+it a lot better. >> Yeah, it's nice. It's nice. Awesome's a good experience. Yeah. >> Am I the only 
+Mac OS user here? Greg, what are you on? >> I'm I Mac, too. >> Mac? I do use Linux at work though, 
+but I just use I just use No, I don't I don't do anything fancy there. >> Honestly, I think Neob 
+consumes all of my config tweaking budget. >> Yeah, >> I have I have like no desire or or like to do
+any more beyond that. >> Oh, >> anymore. >> What is that ball? Well, this this ball this this is 
+technology that use if you're expecting that you might get a raid from the prime engine, you have to
+have a yoga ball to bounce on this ball teach. >> I don't think it's the same one. If you're looking
+for something very funny about that though, you can check out balls.y yoga. That's the website that 
+>> But is it real? Is it a real website? >> Oh, no. You can't you can't actually buy them. Although 
+we may do that at some point. Um, but we did it as kind of a joke as part of this like advertisement
+thing for a for a hackathon. And we couldn't believe that balls. Yoga was available to buy. So, we 
+bought balls. Yoga and put a put a fake shop up with Well, here I I can show the the the best part 
+of the site is definitely the um the all the yoga balls of Prime being sold out everywhere. >> 
+They're all sold out >> in random situations. So, uh, yeah, >> you would sell them. I think you 
+would sell them. RIM fulfilling them. That's that's the difficulty. Physical products are very hard.
+>> NFT is when Yeah, we need an NFT collection for Prime's yoga balls. >> Okay, awesome. Now, the 
+last Emac demo. What do you got for us, Josh? I guess the question would be better like how do I not
+use Emacs I guess >> because I essentially use Emacs for everything except for a web browser a video
+editor and if there's anything text related I'm like how can I do it in Emacs >> now hold on >> so 
+>> I talked to the kitty terminal creator Kobit he has like a browser in the terminal he's working 
+on a variable fund size protocol >> Mhm. for Kitty. >> So, he's kind of recreating Emacs, but in the
+terminal, he he does everything in the terminal. So, it's I It's kind of possible, you know, but uh 
+Yeah. Go on. Sorry. >> He's calling you out right now, Josh. You're not hardcore enough. >> Just a 
+quick quick question. I can't actually hear Josh now. >> Oh, can you hear me? >> I can hear him. >> 
+Yeah, you guys can. I can't. But I I can hear all of y'all. Yeah, that's weird. But I could hear him
+earlier. >> Oh, what if you refresh the page D T D T D T D T D T D T D T D T D T D T Like >> Yeah, 
+I'll try that >> and and let us know. Let us know if it >> Yeah, just let me know. The the issue is 
+the modern JavaScript web, right? So that's why I I I have to use like a Firefox or like a Chrome or
+something like that. Uh otherwise, yeah, I I would use EWW like uh like DT over there. So, um, yeah,
+if if there's a text workflow that I experience, I'm like, how can I do this in Emacs? >> Let's see 
+some show me. >> Yeah. Yeah. Yeah. So, I mean, this is my literate. He was DT showed a literate 
+config for his his uh Emacs. This is mine. I have 2,000 lines. So, when I blow this whole thing up, 
+there you go. 2,000 lines long for that's my config. Um, the thing that I'm really working on 
+recently is actually switching to Nyx OS. So, what I did was I lit I literally configed in literally
+one file my entire infrastructure of all my computers, my servers, my uh desktop, my laptops, 
+everything in one file and then that is blown out into all the other files here. But this is 
+literally the infrastructure of my entire computing environment. So that was nice. What else did I 
+do in Emacs? I uh I wrote a book in Emacs. So I used org mode to write a book, export it to PDF via 
+LTE. As you can see, the LTE header is up here. So that was my my book. What else did I do here? Uh 
+you know what? I'm going to send uh I'm going to send Christian an email here >> from Emacs. >> You 
+should use Emacs. Hey man, you should use Emacs. And then I'm going to uh Go ahead. Sorry. >> Do you
+use it or it's just to show off right now and when no one's looking around, you use a real email 
+client? That works? >> No. No. Actually, I I literally for all my personal email, I use this as my 
+my email client. So, this is MU4E. I uh I love it. The uh the thing I'll do here too, Christian, is 
+I'm going to use MX Spook. So, it's going to attach a bunch of uh NSA alerting uh words to our to my
+email. So when and this is a this is a native built-in function of Emacs in that uh so when I send 
+this email to you, it's going to alert the NSA of all these different words and uh it's going to 
+marker conversations for future reference. So I'm just going to send that to you right now. >> Oh, 
+nice. Then they can store it for you. That's nice. That's convenient. You can ask them back later as
+email backup. >> Oh, guys, I lost a conversation with Link. Can you guys like hit me back up with 
+that? I do not remember what we're typing. So, uh, what else do I do in Emacs? Uh, I mean, I play my
+music in Emacs. So, I was listening to some Aerosmith. >> So, I got some on M. I'm listening to 
+music in in Emacs here. Uh, what else? I don't know. I I literally I program in Emacs. So, here's my
+Go API that I was working on earlier today. Uh, backend, front end, whatever. You can even do 
+database client inside Emacs. I actually use um REST client. These are not these are not live 
+secrets so don't worry about it. But uh I can literally send rest requests using rest sorry rest 
+client mode. So if I want to send a request uh when I'm testing an API or something like that I just
+uh use Emacs. I don't need Postman or some proprietary garbage like that. >> There's a plugin. 
+Postman had Ryan Reynolds come to their conference, dude. I mean they're pretty cool. Okay. So >> 
+yeah, I'm not cool. So I use Emacs. >> Yeah, there's Kalala. Envim as why so serious said in the 
+comments that allows you to do that as well. >> The uh the Emacs email client though MU4E for those 
+of you wondering. It is very nice. Like you would use it all the time. I don't use it. Uh not 
+because it's not good. It's just because when I'm in Emacs and I'm recording my desktop a lot in 
+Emacs, people don't need all my personal emails >> or or my addresses because then, you know, you 
+get all the trolls. >> Yeah. >> Amazon shipment sent to >> I asked I asked Christian if I could send
+him an email to that one. So, >> it's a publicly available email. >> Yeah. Not as private. Uh >> 
+nice. >> I've been doxed already, so I don't my address. That's not a problem. >> Yeah. So, I mean 
+that's that's if there's something that I can't do in Emacs, I think of a way to build it in. So, 
+like I actually built a launcher inside Emacs that literally will launch programs, find files, 
+whatever. Um, I actually going to probably package this out to Melpa. It'll be the first package 
+I've ever built. So, uh, I'm not a maintainer or anything of Emacs, but I'm going to maybe put my 
+hat in the ring of throwing out a a, uh, an Emacs plug in there. Um, >> I did something similar with
+Emacs, uh, making it a run launcher where it was very similar to ROI or DMU. It's just small window 
+that was just the mini buffer that I could search the programs. >> The only thing about Emacs is 
+that it's single threaded. So, this is I I will concede here is that >> they're working on it 
+though. They're working. >> Yeah. >> I I can't I can't wait till it's multi-threaded cuz my 
+goodness, like asynchronous inside Emacs, like but uh yeah, so if you if you have something hanging 
+a thread, you're you're so uh so that's the only issue that I have with it. >> It's really the only 
+issue preventing it from being a window manager, too, is the fact that it's not if it was 
+multi-threaded, then >> I would need Yeah, I just launch Emacs and that would be it. Then what is >>
+it's the only reason I don't run >> what issues have you experienced because of the single thread it
+>> so if you're running like a big just a big project or something like that and it hangs uh or if 
+you have a crash like for example if I'm using that as my launcher and I run a uh Firefox window 
+from it the Firefox window crashes when Emacs crashes so everything is >> crashes the whole server 
+>> exactly So, it's all reliant on that instance of Emacs. Um, it's why exwm is it's something I've 
+thought about running, but at the same time, the issue with it is that I don't want my window 
+manager to be single threaded. >> It's a problem because I I tried XWM for a little while and like 
+doing things like video editing or anything that's really kind of resource inensive. As soon as that
+that crashes, the whole window manager crashes and everything you had going on, >> it's a it's a 
+pain. >> Yeah, >> it's not worth it. >> Yeah, I So, I'm I'm waiting for I don't know. I know it's in
+the pipeline. I know multi-threading is they've built in uh there's asynchronous functions and stuff
+that you can run and I do know that native compilation also sped up a lot of the the threading but I
+I know that they're it's coming down the pipeline by much smarter people than than me. >> Do you do 
+something outside Emacs? Josh, what um does Emacs not allow you to do? Browse the web, edit video, 
+edit photos. Oh, >> there is a video editor in Emacs. I actually did a search for it one day because
+somebody sent me a message, hey, you know, there's a Emacs program, a video editor that's written in
+Emacs list. It's like there's no way. I went and found it and I uh installed it and it is very very 
+very basic, >> but you can actually do some really simple video editing in Emacs if you wanted to. 
+You'd be insane, but you could do it. You could use ffmpeg >> like you you could write you could do 
+f everything in ffmpeg if you really really wanted to. Um and I mean that would be >> that would be 
+something. I was really hoping you were going to say edit you know edit videos, edit music, edit 
+text. Those are all the things that I don't do inside. >> All right. >> It's essentially my computer
+like that. That is it's it's >> We do have good multimedia stuff though. Like like he mentioned the 
+uh multimedia player. I'm assuming you were are you using ems for playing your audio? That's what I 
+I use too. And also there's like radio uh streaming plugins also for EMAC. Like you can do all your 
+audio and music in it. >> And >> what do you guys think about the opposite tool? The guys that are 
+on the neim side. >> Let's let's go with Greg. What do you think about Emacs? Greg, what's your 
+experience? Have you used it? What are your thoughts? My my thoughts on EMX are I think it's great. 
+I think it's a great tool. Like everything Josh just showed I'm like I'm honestly impressed. I'm not
+sitting here sneering like oh like no I'm like I think that's serious. It's so cool. Um I think like
+having having um treating like treating Emacs as a platform that you can build on and having that 
+scriptable environment like that's it's very much a live environment is is amazing. Um, I have tried
+Emac. So, I I started with them. Honestly, if if I don't even remember honestly how I first started 
+with them. It's so long ago now. But if if how whenever that was like if I had stumbled on Emacs 
+instead, you know, it's very likely I could be on the other side of this conversation today. Um, but
+I I tried Emacs after having used Vim full-time for like five or so years. And it was most out of 
+curiosity. It was like, you know, I I just want to see what this tool is like, right? Like I hear so
+much about it. Um, and I probably read some blog posts or something. Uh, and I spent I spent a good 
+amount of time like reading reading through like the info pages, like the basic stuff, how to how to
+navigate with Emacs, kind of like um, you know, just really spending time with it. I I was never 
+able to get it to stick. And I really did try. I I made multiple different attempts to like really 
+kind of get into Emacs and be an Emac person. Um I think for me the difficulty was so a lot of 
+people even with NeoM today and there's going to be some irony here and that's what I'm like 
+preemptively going to address the iron is people people today like have this fear of neo as 
+extremely complicated. Um, I think there's there's a reputation that M is really hard or like you 
+have to install like one of these dros or something to get started with it because like to have 
+anything work functional and working like you have to install a thousand plugins. I do want to 
+unequivocally say that is not true and this is like a subbox of mine. like you could install Neo 
+totally basic out of the box and have an extremely useful editor with with almost zero 
+configuration. Um, but that's not the point I want to make. The the point is that people talk about 
+how hard is to get intom and like uh whether they should craft their own config and take the time to
+learn it or just take a off-the-shelf DRO. And I'm very much on the side of like I know it's 
+painful, but you should absolutely do it the hard way. spend time with it. Start with nothing and 
+then only as you say, "Okay, I'm hitting a limitation." Go out and and add add a plugin, add a add a
+key map or whatever, right? But like take the defaults as far as you can first. I I understand 
+people are busy. Like people just want to get stuff done and they don't always have time for that. 
+But that's that's my advice and that's what I encourage users to do. Now I think my difficulty with 
+Emacs is I was not able to follow my own advice with Emacs, right? Emacs, I think, is like them and 
+Neo Vim where out of the box. It's it's extremely capable editor, but it has quirks, right? It's 
+it's old. It's been around for a long time, just like VIN has. It has all these kind of weird legacy
+design decisions that can't be changed now because it would, right? It would cause um space bar 
+heating for somebody to put the XKCD comic. So, experienced users of both NEM and BIM and Emacs like
+learn to live with this and it's not a problem for them. But for for new people, they run into this.
+And so it there there are a lot of like paper cuts, time to kind of do things from scratch. And I 
+just like could not like I would I would try to use Emacs basic and I'd be like, "Okay, I have to 
+change this one setting. Like this is just not working for me." And then I would like I have to 
+change the other setting. And then before I know it, I'm like spending all this time writing all 
+these different big files. And then I'm like, "Okay, now I need to install plugins. How do I install
+plugin?" and it gets overwhelming and I'm like okay let me just try I'll just try just so I try like
+domax I thought it was great I was like this is really cool but then I run into the same problem and
+this is exactly why I know I'm biased people do this for NeoMim is that when you when you are using 
+someone else's config you're using their design decisions you're using we talked earlier about how 
+these tools are so powerful because you craft them to fit like your hand like a glove right and when
+you use these offtheshelf dros you're wearing someone else's glove which is not necessarily bad like
+a lot of these popular dros are popular for a reason. Um, but you end up having to learn the tool 
+itself and also learn the DRO and like the designs they chose. And anytime you run into something, 
+it's like, is this a DMAX thing or is this a a domax thing, right? Is this a minimum thing or is 
+this a lazy, you know, mamm thing? Um, so that that was kind of my experience with it. I I did try 
+multiple times uh and I thought thought it was great. I could definitely see the potential and I was
+like, I really want to like this. I thought or mode was super cool. I literally sat down at one 
+point and just like watched a lecture on or mode like I want to understand why people won't shut up 
+about this, right? Like why is this so cool? And I I see the appeal and actually I I wrote like a 
+little BM plugin that kind of s like I me it's like the most basic part of mode where you can do 
+some really um primitive literate programming and markdown files because like this is just a really 
+cool ability to to do something like this. So I 100% see the appeal, but I think I think by the time
+I like approached Emacs, I was already just so then pilled that moving was going to be really 
+difficult. But I definitely took a lot of inspiration from Emacs as you saw like with the list. Um I
+I do think that Neoim has kind of bridged the gap in a sense between legacy Vim and Emacs, right? 
+Emacs has always been extremely scriptable. It's a platform that you could control and I think Vim 
+has really has really brought that paradigm to the kind of the Vim world a lot more. >> They seem to
+be converging like there there does seem to be some convergence for sure. >> Mhm. Yeah. I guess that
+like to paraphrase I have nothing but respect for Emacs ninjas, right? Like I feel like in the world
+of like VS and cursor and Winder or whatever, right? like we're like we're like holding on to our 
+our 40-year-old tools like you can take these out of my dead hands, right? So there is like a little
+bit of a camaraderie there. Um but I I do think like Neoim users and Emac users, right? The reason 
+they're so sometimes obnoxious about why they love their tools so much is because they have they've 
+experienced that the power of customizability, right? And once you get a taste of that. >> Yeah. 
+Yeah. >> You can't give that up, you know. >> Yeah. Yeah. Definitely. That's why I don't know. 
+There's only two editors, two real editors out there. You know, Neo Emacs, there's a lot more out 
+there. VS, you always censor that word, right, teach? I'll try to censor it as well for the video. 
+>> Exactly. Yeah, >> it's a family-friendly stream. Link, why are you cursing on stream, please? 
+Dude, come on. >> Yeah. And let's go with one of the Emacs guys who wants to go DT. What are your 
+thoughts on the other tool? Neoim, >> it's fine. I mean, I use it. I mean, it's it's fine. Uh where 
+I will mention, you know, where they differ, Neoam has much better defaults than Emacs. One of the 
+biggest complaints about Emacs as far as growing a user base is it has horrible defaults out of the 
+box because it is not configured in any sensible way. You get this very ugly white window with black
+text, this really small uh it does have menu bars and you know a menu system, but it obviously you 
+have to deal with the EMAC key bindings. If you're not familiar with the Emac style key chords, it 
+is really challenging for a new user to jump into that thing. So, I feel like Vim and Neo Vim are a 
+little easier to get into, especially you got the Vim tutor to accompany you along the way. I feel 
+like anybody can be on their way within a couple of hours, you know, with them uh to where they're 
+reasonably comfortable, you know, opening a file, closing a file, making basic changes to a text 
+file. Like, it's not much of a problem where Emacs is a real investment. So, that's the downside to 
+Emacs where I I think and Neo Vim really shine. >> I also love the Vim key bindings. I I cannot 
+stand the EMAC uh key chords and I've tried them when I first switched to EMAC. You know, I used it 
+for like a month because I wanted to learn a lot of the standard EMAC key bindings. I still remember
+a lot of them from that experience, but it hurt my hands. Like I really did have some hand pain. No,
+no lie. It actually like that was the reason to change. It's like I'm going back to the Vim 
+bindings. So, I found evil mode um Doom Emac. uh switched to it which already had evil bindings 
+already baked in and that made a big difference because all of that control ctrl srl ctrl x all of 
+that was so bad on that pinky right it's just I couldn't do it so that's the the two areas where I 
+will give vim/neovim a lot of credit uh and and emacs you know need some work in those departments u
+but other than that I I've got no real complaints I think I I use both. I could use I I could easily
+just stop using Emacs one day and and live in Vim or Neoim. The one problem, the one thing I would 
+really miss is I've become so invested in org mode. And even though org mode has been around for 
+more than 20 years now, it is still still a EMAC thing, right? It's not you. There's plugins for 
+other editors, but just the way that thing was originally designed and built with with all the 
+various functions and, you know, generating tables and spreadsheets and things like that, you know, 
+really neat stuff. It's hard for other editors to adopt it. Uh, and really have like 100% 
+compatibility with everything you can do in org mode. That's the one thing where if you get into org
+mode, you really are kind of locked into Emacs. Do do you literally program all of your configs and 
+everything? >> Yes. >> Yeah. >> Because I think it's easier when I put it on GitLab, it's a lot 
+easier for folks to read that document as a or document than for example, well, I mean Qile for my 
+window manager to read a Python file. I mean, they could read the Python code, but when I actually 
+create a table of contents and an outline and blocks of code and then, you know, have comments for 
+each block of code, it makes it so much easier for somebody, you know, for a noob that maybe doesn't
+know any Python. They would understand that a lot easier. >> You you hopped out of the stream, but I
+I showed I literally programmed my uh Nyx OS config. So, essentially all of my infrastructure is 
+literally one file. >> Yeah. Yeah. And I've done some of that before where I've had one literate 
+config for multiple things. One area a lot of people do that with is with websites where you write a
+file and you have literate one literate config for all the HTML, all the CSS and all the JavaScript 
+in one file and it's just just this gigantic file. But it's the whole website, right? But >> uh I'm 
+not much into web development these days. it becomes I do think there is a downside to putting too 
+much into one config. I I think sometimes you do want to split some of that stuff up. >> Yeah, I 
+feel you. >> Okay. Okay. And um what about you teach? What are your thoughts on Emacs? >> Yeah, I 
+don't think about Emacs. [Laughter] >> I was I I was waiting a long time to do that one. I was 
+waiting a long time for that one. >> That was almost as good as your dad joke. >> Thank you. Thank 
+you. Thank you. >> Oh man. No, my my serious answer is I actually I I feel really similar to Greg. 
+Uh I think Neo took a lot of inspiration from Emacs of just saying like it's really possible to just
+do a bunch of things and have nice things. Like >> yeah, we can just have a terminal guys. Like 
+people write terminals. We could put one in. >> You know what I'm saying? Like we could we can put 
+one in. That's fine, right? Um and we don't need to be like afraid of of those things. Like as long 
+as you do it in a way where it doesn't uh like basically start multiplying the weight of 
+maintenance, right? Where like, oh, we added this thing and this thing and now it's four times as 
+much instead of twice as much, right? um you know so find a good terminal library that you can embed
+inside of neoim that does most of the work for you and then you can put one in and it's not that 
+much work you know similarly for like you know asynchronous events and like an event loop and stuff 
+it's like hey like node solved this already with UV like and they have sick bindings we can just put
+this inside of neoim and do the same thing and it's really good right so um so like I think emacs 
+inspired like a lot of stuff um for Neo of him and I think there's been a lot of like mutual uh sort
+of like pushing each community forward like of like oh that was cool that they did this that was 
+kind of like a twist on our thing like we'll do this and then kind of like a nice um you know 
+camaraderie and of course you know I like I I've never like you know I'm I'm 31 I'm not you know I'm
+not ancient or anything but like I never really felt like any serious like Neoim or like Vim and 
+Emac beef like my whole life it always feels is like, "Hey, we've got some like properly open source
+editors here and we're like fighting against the world, you know?" So, it's like I always feel like 
+that's what that's that's the joke like on my stream why it's like when we go, "Yeah, VS like 
+Microsoft lies about that being open source." Like I don't have any problem with closed source 
+editors. You know what I'm saying? Like, but like Microsoft is lying about V like VS Code, right? 
+You know what I'm saying? They're saying it's open source, but then they're that's not true. And 
+they're like putting all this other stuff and they're releasing LSPs that can only run inside of 
+Microsoft's things and like all you know the the list goes on and on. Like so I'm like I like I 
+don't care if you make a close source editor, but like don't lie to me about it. You know what I'm 
+saying? So uh yeah. So I think like Emacs and and Nehem are on the same team and like have had >> 
+Well, I don't know because when you say they're on the same team, there it's probably the biggest 
+software war has been VI versus Emacs dating back to the late '7s. And that's been going on 50 years
+now. So I don't know. >> There's maybe a few people, you know, like how after World War II, they 
+like found some guys. >> The Nick beards have almost died out. You're right. There's not many of 
+them. >> Yeah. Yeah. Yeah. But I'm saying >> just they're still sitting around programming in Pearl 
+and all. Right. >> Yeah. I just don't run into I don't run into them that often. Yeah. >> The ones 
+left are like 70 already. So they don't care. >> Yeah. At least if they >> I don't get online until 
+after their bedtime. You know what I mean? So >> yeah. >> And then I got to I got to jump pretty 
+soon. Link, just as a heads up. >> All right, teach. No worries. When you are when you need to go, 
+just just drop and um What are your thoughts on the other tool, Josh? >> I mean, I use I mean, 
+people are going to hate me for this, but I use Vim inside Emacs, right? Like like I use evil mode. 
+I am an evil user, so I'm a bit of a trader from day one. Um, now with that being said, like you 
+can't run Emacs inside Neoim, but you could run V Vim inside of Emacs. So, >> I we can though cuz 
+it's I can run the terminal version. Yeah, if you can run, if you can emulate a terminal, you can 
+type emac the TTY version of Emacs the >> can't get images. Can't get >> Well, no, but Greg Greg 
+Greg's done it soon. >> Actually, I actually that's actually that's actually false today. Uh, is my 
+screen share still working? I have to show this off. >> Yeah, >> the gauntlet has been thrown down. 
+The gauntlet has been thrown down. So, now I have to show this. So, our uh another member of the um 
+another NEOM core team maintainer wrote this uh Sean Der whose name I've never actually said out 
+loud before, so I hope I said it right, but he wrote uh Doom that runs inside Neodym. So, I'm going 
+to we're going to run real Doom inside of Neodym inside of my terminal. Um running right now. I 
+don't know if you guys can see it. I'm not seeing it come through on the screen share. >> Yeah, it's
+not coming through on the screen share. >> Did you share my application or the entire screen? >> 
+Hold on. >> Oh, maybe there you go. >> They are converging. I like I will say Emacs and Neov are 
+converging on features and cuz I mean you see something cool over here, somebody's going to write it
+over here. If you see something cool over here, somebody's going to write it over here. So >> 
+variable font size like in some gooies. Oh, nice. Here we go. >> There you go. >> Yeah. So, I 
+actually don't know how to play Doom. >> Uh, but uh yeah, this is like this is using the the Kitty 
+graphics protocol that uh Kitty introduced. >> Uh I'm using a terminal that supports it. So, this is
+Yeah, this is like this is displaying. >> I mean, it's pretty smooth, too. >> But I mean, this is 
+obviously kind of a gimmick. Um >> so is Tetris and Emacs. >> Sean would have totally did that, too.
+Like we definitely have ambitions. You add image support so that you can like view like a really 
+cool thing to be able to do would be able to have markdown markdown buffer and then in a split pane 
+have the rendered version, right? Like you can do in VS Code or EMAX. There's no reason we can't do 
+that in in any of them the terminal that supports the KD graphics protocol. Yeah. And then yeah, the
+variable font size thing is another thing that is still really new but that we want to support as 
+well um for the same same idea. So there's a lot of cool stuff happening. A lot of cool stuff that's
+already happened the last couple years with terminals. >> That's pretty cool. >> And that's going to
+keep happening too. >> Shout out to to to to Henrik for Doom Emacs, too, because honestly Doom EMAC 
+is the thing that gets people early access to Emacs. If you if I didn't have Doom EMAC, I don't 
+think I would be using Emacs. >> It would be a much tougher barrier to entry without it. Yeah. Yeah.
+>> Yeah. There's so many sane defaults that he put into that repository that Yeah. It's insane. And 
+I mean, he's done a ton of optimizations, too. Like, it's not just um it's not just like keybinds 
+and stuff. Like, he's he's literally made things faster. So he's he's done a great job there, too. 
+And he's made it accessible to the Vim user, you know, thinking thinking about coming over to Emacs.
+So >> yeah. Yeah. TJ, you already have the drop. So one last question for you. >> Yeah, hit me. >> 
+Um, what would you recommend someone then, someone just starting, would you recommend them to go 
+with Neoim? >> They should try both. >> Dro, they should try both. >> Dro or no Dro? >> Oh well. So,
+so I would say if you don't have anyone uh like that you're friends with that uses one or the other.
+I think testing a DRO and just being like, "Oh, this has features that I like." That's like a good 
+start. Then you know it's possible to do like in the editor. then maybe pair that back and try and 
+build something either from like like I'm partial to like kickstart or something like this where 
+it's like small and you can read it all and you can see um but you know pairing it back to something
+where you actually know what like every line in your config actually does and then maybe like you 
+know later you could hop to a dro if you feel like it's a good value prop for you but it's like I do
+see a lot of people who have a lot of pain because they like never bothered to do 10 minutes of 
+reading the docs and they never figured out. They're like, "Vim has help." And you're like, "Dude, 
+that's like the key feature." >> Chang GPT does not fix your issue. >> GPT is actually pretty good. 
+People should be asking more questions to chat GBT and like learning how to actually paste and read 
+a whole error message and response instead of being like it didn't solve it in 5 seconds. Um like I 
+find I find it's very good at a lot of those problems because someone else has already had them. So 
+like >> um >> chat GPD is just asking Stack Overflow where the questions already been answered. 
+Yeah. >> Yes. Right. So, >> um, but so I I'm more of like not a not a huge Dro fan. Like I I I'm I'm
+le at least in the Neoim world. I don't know. The the Doom one I hear good things about, so maybe 
+it's, you know, different over there. Um, but it just seems to me to end up with you never figure 
+out how to actually use it and then like something goes wrong and then you're just mad. Like I for 
+me like I haven't even changed anything in my neon config for probably 6 months. Like I don't even 
+know if I've done a commit. If I have it's like literally like it's less than 10 lines probably. 
+It's like literally nothing can break. I'm not even updating plugins most of the time or or Neovim 
+most of the time for that either. Like if I'm not doing if I'm not interested in getting something 
+it can't break on me and until I ask it to like >> but if you're like oh it just every time I open 
+neoim it auto updates it pulls the latest Neovim update and pulls the latest lazy thing possibly 
+from the same day. Nobody's had time to sync those up together. >> You're touching a sore spot for 
+me right now. TJ, >> I know I am. I know. I'm helping. I'm helping Greg. I'm helping. >> I know. I 
+appreciate it, dude. It grinds my gears. It grinds my gears when I see people complain like, "Oh, 
+Neob's breaking all the time." And I'm like, but yeah, you're the one that that's daily driving 
+ahead like as a master branch updating your plugins multiple times a day and you have like 60 
+different >> plugins. Morning routine is like I I get the latest Neo Vim without reading the change 
+log. >> Yeah. >> And I get the latest version of my thousand plugins and then crazy since none of 
+those are actually released. They're all just from Git. They're not a version. They don't work all 
+the time together. Yes, of course, guys. So, like, so yeah, so I think you just end up in that 
+scenario like a lot more often and you get this feeling of like it never works and you're like, 
+dude, you don't have to update anything. >> It's okay. >> How often do you update teach? >> Well, it
+just depends like I mean like like lately cuz I since I haven't been it's for me it's very different
+because when I was like actively doing a lot more Neoim stuff, it would be like all the time. That's
+because I was working on Neoim all the time like with all my free time and now it's like rarely like
+>> once a month maybe. >> I don't even do that for for Emacs and all my my Emacs programs I update. 
+Seriously, I might update it three or four times in a year. >> Yeah, I'm working. Why why bother? 
+The only time I update it is if I need to. >> Yeah. >> If I don't need to, I don't touch it. >> 
+Confirmed Debian stable user. No. >> So, anyways, I got to run. Hey, thanks. Thanks everybody for 
+having me. Appreciate it. Yeah. Yeah. Yeah. Thanks for uh being flexible. See you guys. >> Take 
+care. >> Yep. >> All right. And um what would you recommend DT to someone um joining like someone 
+new, someone out there that is using VSC as their daily driver and they're like, "Oh, I want to try 
+one of these two." What would you say to them? >> Well, I have some strong opinions. Uh and I'm 
+going to disagree a little bit with uh TJ. I really think they should learn Vim and learn the Vim 
+bindings. like the very first thing they have to learn how to how to use it. I'm coming at this from
+a Linux perspective too. You need to know how to use Vim whether you eventually learn anything about
+Emacs anyway. You got to learn Vim. So that's that's the number one thing they should do. Once they 
+know how Vim works as far as the key bindings especially, then they can worry about moving to other 
+editors that also use those bindings. >> Awesome. Okay. What about you, Greg? uh someone coming from
+VS. Yeah, I I agree with DT. I think I think for any software engineer, knowing how to navigate the 
+basics of BIM is never going to be like a wasted skill. Like you're always that's always going to 
+come in handy. >> Um >> into a machine that has only has VI, you're going to you're going to need to
+know those bindings. >> Yeah. And you know, do a peace meal, right? like if you're if you're a VS 
+Code user that uses, you know, that is comfortable VS Code and you're you're new and been curious, I
+would say um find ways to do it in chunks, you know, like you can try to switch wholesale like cold 
+turkey. That's going to be really challenging and you you're probably going to get you're going to 
+hit a lot of friction. This is true of any tool, right? not just with me like changing a making a 
+big switch like that is going to introduce a lot of friction and if if you are going into it knowing
+it's going to be hard but you're dedicated to pushing through that's great. Most people are not like
+that, right? Like most people, especially if this is like a work context, like most people want to 
+say be productive. So find ways to do it in small chunks. Um, and don't don't start Neoen with like 
+your neo journey or whatever with like 40 plugins, right? Like start Neoan to edit edit a file, make
+a quick make a quick edit, and then start learning, okay, how do I how do I create some splits? How 
+do I navigate windows, right? And just do a little bit at a time. I mean, I I I I'm I like I'm 
+proficient any of them, right? Like, that's not bragging. Like, that's just a statement of fact that
+I've been using them full-time for like over a decade at this point. Like, I did not I did not like 
+walk up to a computer when I was 18 years old and like like fly around the like nobody does that. 
+It's very much a progression. I'm sure Emacs people are probably the same. Like, when you start 
+using Emacs, you're like David's first um you know, >> right? Right. You don't start with the hard 
+you complicated stuff like macros and you know substitutions and things. You you just need to know 
+the motion keys at first. >> Poor maintainer of neoim. I'm proficient at neovim. >> Neoim. >> 
+Breaking news. >> That's biased. Yep. >> And what about you Josh? What would you recommend someone? 
+>> I I wholeheartedly agree with that but I would even go one step further. If you're move, if you 
+are editing text on a computer, you should learn Vim. If you are, if you're a writer, you should 
+learn Vim. >> If if you do anything editing and everybody edits text, you should learn Vim. Vim is 
+Vim is incredible. The way that uh modal editing and the I'll call it mimmonic editing like DT2. H 
+There you go. Shout out DT DT2 to Word or whatever. Like that's incredible when you when you start 
+to see that from a what do you see is what you get editor coming to that you're like it it's a 
+revelation. It's it's diff it's completely different >> and it's not just for programming either. I 
+like he he mentioned his book just creative writing because I've done the same thing. I've, you 
+know, written a couple of books, you know, I I write it all in Emacs using the them bindings, the 
+evil bindings, right? And then, you know, when it's actually time to format it and I'll put it into 
+a word processor. But it's so much easier when you're writing to use the key bindings, you know, the
+Vim bindings. It speeds up the process, especially when you need to move around large blocks of 
+text. You know, just you using a standard text editor is is much more complicated. It probably saves
+me, and this is not a joke, probably between a day to two days every single month of work time, I 
+would say. Like, and that's not an exaggeration. Um, which is insane. Now, I I've I've done some uh 
+I've done some macros, some pretty complicated macros on things that literally would have taken me 
+days, if not weeks, to do the same thing if I didn't have access to that kind of power that you get 
+in a in a Vim or Emacs. >> Yeah, 100%. And and I mean, I think it's honestly just starting with 
+Emacs. Like, I think I think Doom is a great starting point, but like that is it's an editor of a 
+lifetime. Like when you look at these two editors, you are essentially undergoing this is a journey 
+for the rest of your computing natural life, right? So um >> you shouldn't be hesitant to look into 
+either of them. Try both of them and just get started with it because it's it's going to be the the 
+rest of your computing use of a computer for the rest of your life. you're going to be using these 
+one of one of these two tools if not >> you you you may not end up on Vim or Emacs down the road but
+yeah you will definitely come out of it different you will view software and computing in a totally 
+different way. Yeah, it there it's a paradigm shift like it is it's a philosophical >> it's a 
+different way of using a computer than you have >> you know grown up using we should have the sensor
+button for wi Windows beep but but you come from that and you come to this and you're like they're 
+they're not even the same it's not even the same endeavor. >> Yeah, it's pretty tough to go back to 
+something else after I've used Neov. I'm not on a I'm not on a developer, you know, but just for my 
+markdown, my blog post and all that stuff, if if I need to write scripts, I cannot do it in VS Code.
+I could, you know, and I can enable Vim Motions, but it just doesn't feel the same. It's I don't 
+know. It's It feels like a total downgrade, man. I don't know. >> Yeah. >> All right, guys. Really 
+appreciate everyone's time. Thank you very much. Thanks to all of you as well. >> Thanks for 
+organizing this. I enjoyed the the chat. That was fun. >> I gota say, Greg, like it's definitely a 
+thankless job to maintain an open source project. So that's pretty cool, man. Like >> Oh, thanks. 
+Well, it's not always thankless. I mean, you just said you just I get I get occasionally stuff, you 
+know, people stuff like this happen, so it it feels a little bit not so thankless. >> Yeah. No, 
+that's awesome. No, honestly it's I don't think of it as thankless uh to talk about this for a 
+second. It's I think of it as a huge honor honestly like to see um someone I really respect is is Co
+who who Christian just interviewed right like to hear Co say >> I watch hardly Yeah. >> I was not a 
+fan >> I I didn't know too much about him because you have an image. Did you have an image before 
+the video? Be honest. And did it change after after it? is I I mean I I I didn't watch the whole 
+thing. I I already know Co kind of I don't know him personally very well, but I've interacted with 
+him enough between Ghosty and you of him to already have like know his little bit of his 
+personality. Um but I I you know like he's kind of a controversial person. Are we still recording? 
+Are we still live right now? >> Yeah, we're live. We're live. No, but >> but time to take this 
+private. >> Yeah. Yeah. I I didn't I didn't That's why I was being quiet. Josh, he's being quiet. 
+We're all like, "Where's this going?" >> I'll say uh I'll I'll still say I was going to say like I I
+understand he's kind of controversial. He has some hot takes and opinions of course and he's like 
+he's publicly said things that I think were sometimes rude for sure, but I also have a ton of 
+respect for he's he's he's he has single-handedly pushed the terminal ecosystem as a platform. Yeah,
+like I I think even 5 10 years ago to even say that the terminal as a platform would have been a 
+joke, right? Like I don't think anyone would take that seriously. But uh co has almost 
+single-handedly solved so many issues that have been play that have plagued terminal applications 
+for for years um by himself like that. I still have a huge amount of respect for him. Anyway, what 
+the only reason I brought this up is because to hear someone like that who I admire, respect, they 
+like they're using them, right? Um, with on the go project, you know, Mitchell is the is the kind of
+the lead developer, the originator of that project, >> and he uses nem, right? And another person I 
+have this enormous amount of respect for. Um, I have co-workers, right? I they they don't know me, 
+right? They don't but they they use N of them, right? So like the the being on this team of people 
+that creates this um this this tool that people love, right? Like it's it's like it was like the top
+most loved editor and the stack of work plus surveys for like multiple years in a row. >> So like 
+that's a huge honor to me. So like I I don't think of it as thankless. I I'm just like so glad to 
+even be included, right? Like to be able to do to be able to be able to touch this thing that has an
+impact on people's lives. I get a lot of extra out of um it's a big responsibility too, right? like 
+his I I do take it really seriously when people say that they updated any of them breaks, right? 
+Like I I think we're maturing as a project to try to be better about that, but it does it does have 
+a sense of responsibility that like this is an important part of people's workflows and we need to 
+take that really seriously. Uh right >> and going back to the point of co as well you know I had a I
+don't know I watched a couple videos maybe because you just watch videos you just read a few 
+comments in GitHub and you create an image right of of that person but after the interview that 
+completely changed I'm a fan now like >> full co fan man. Oh yeah, >> I'm a I'm a fan too. Like I 
+said earlier, like I I know I asked the question we were live. It was kind of hinting that I was 
+going to like talk crap, but I I really wasn't like I I had a ton of respect for him, but I think um
+every new user owes him a lot even if they don't use Kitty. >> Yeah. Now, do you know >> who started
+the graphics um GPU accelerated terminals? Because I forgot to ask him that. Was it co or was it the
+elacrity guys? Do you have an idea? >> Oh, no. I don't I don't know which honestly I think iTerm 
+might even be in that discussion honestly because iTerm has been around for a long time and they 
+also have GPU acceleration. I don't know who was the first to do it though answer your question. >> 
+I don't use a Mac but on Linux elacrity was the first one I I remember >> I was going to say >> and 
+and now there's a dozen of them. >> Well, okay. Any anything else? Any final words that you guys 
+want to share? We can do a round table if you guys like. >> Oh, that was that was a great 
+discussion. I I mean there was no uh you know throwing down or anything like that. So, and I do 
+agree with DT like this is like the the oldest going battle. Um and it's probably just because we're
+not 70 years old that we're not screaming. >> We're not invested in it. Yeah. Yeah. Yeah, it's like 
+it's one thing. It's >> I was going to say it was different obviously like in the 80s and 90s people
+took that that editor battle >> seriously where now nobody really cares >> cuz let's be honest you 
+know Neoim Emac most people are using that editor that shall not be named really what uh I don't use
+it I've never tried it I I know nothing about VS beep but I'm sure it's fine too >> yeah it's like 
+Linux and Mac OS you know I have been interviewed in Linux channels UDT broadie as well I don't know
+I don't know if the communities are being brought together as well in that sense or I know there is 
+a fight against Windows I don't know why but um >> they're strong opinions >> strong opinions >> 
+it's open source versus everyone really like I think that that at the end of the day it's open 
+source versus closed source. And I think open source is winning um drastically. >> Yeah. >> Yeah. I 
+think it's different now because Linux is becoming so much more popular. Like we're we're gaining 
+users at like a crazy pace. >> When I started using Linux on the desktop, we we didn't even have 
+like 1% market share. >> They just crossed five. >> Yeah. Like it's it's it's insane, you know. And 
+yeah, like we just crossed 2% probably 5 years ago when you think about that. We more than doubled 
+probably in the last uh since the Steam Deck, >> you know, became a thing. Really? I I think that's 
+helped. >> Yeah. When I started using Linux, 2.18% or something. >> Yeah, cuz I remember looking at 
+like some stat counter metrics like in 2007, 2008 where it didn't even register. Like it's less than
+a percent, right? It's just crazy where where things are at now. >> Yeah. >> Yeah. >> Sick of it. >>
+And we're taking all that market share from Windows, by the way. It's not it's not Mac losing users.
+It's it's Windows. They're all Windows. >> Mac, too. I don't know if you guys have heard about DHH 
+recently. He switched to Linux and uh >> I think a lot of people are thinking about it. Have you 
+thought about it, Gregory? You said that you don't have the time and energy to invest in the Linux 
+desktop right now, but have you thought about it or you're just like, I don't care at all? >> I I 
+use Linux on the desktop full time at work. I have a Linux desktop right here on the ground next to 
+me that I use to play video games. The magic number is 3,100,082.
+Uh, I would say using, this is not going to be a popular opinion,
+but using Linux at work full-time has made me appreciate my Mac even more. So, no, I'm I'm I'm fully
+Mac filled. I really like Mac OS. I appreciate Linux. There are a lot harder I like, but uh I Yeah, 
+I I'm I just I I really like using a Mac. >> I'll hold you a Mac user for life. >> Yeah. And why is 
+that? >> Why? >> Yep. I feel like for me, Mac OS strikes the perfect balance between um aesthetics, 
+design, and still has enough of the PAX underbelly foundation to be enough like to let me do all the
+things that I want to do on a computer. Uh and it's it's like it's it's stable. The like on these 
+laptops, the battery life is insane. I I'm going to like I don't know. It's a hardware thing, too. 
+This is not necessarily Linux's fault, but like on my on my work laptop, I have it unplugged right 
+now. I guarantee you when I come to work on Monday, it's it's asleep. It's not on, but it's not 
+charging. On Monday, when I come into work, it's going to be dead. >> Mhm. >> It's going to be like 
+it's suspended and the battery is still going to drain and die. On my MacBook, I can leave this 
+thing off the charger for weeks and I can just open the lid up and it's still good to go, right? 
+Like that's that's huge. Uh this thing doesn't even have a fan. Like this thing had like my MacBook 
+will will turn like crazy. Like I can it has enormous computing power and I never hear the fan. On 
+my Linux work laptop, the fans never stop. Like it's stuff like that, right? Like just the And 
+there's like there's stability problems, right? Like the audio on my on Linux is such a pain, right?
+>> Yeah, that's definitely >> I've never had any audio problems on my Mac. So stuff like that, 
+right? There there's I I I totally understand the people that like that like the um like to tinker 
+and want to modify their system and control it to customize it. Totally understand that. And I if 
+that's something you care about, obviously Mac OS is not going to be for you. But for me, I'm like 
+I'm at a stage in my life where it's like when I get on my computer, I just I'm I'm there to do 
+something. I'm there to like get something done and I just want to open it, have it work, get 
+whatever is I'm doing done and be done, right? Like if if I want to tinker, I have my my gaming 
+computer, right? Like I have that outlet if it's if I need it. If I just want to dig around, you 
+know, pardon my >> It depends on the type of of user you are, too. Like we're all probably the kind 
+of people we spend most of our time in a terminal, at the shell, in our text editor of choice, 
+whatever it happens to be. And the operating system at that point really doesn't matter. as long as 
+you can get to the tools you're using, >> it doesn't matter, right? That's why I don't really hop 
+between Linux distros anymore because it doesn't make any sense if most of the time I'm spending in 
+the shell, you know, in the terminal using the same bash shell with the same core utilities. It 
+doesn't make sense for me to spend a couple hours hopping from one DRO to the next and then the next
+day do a different dro and like I'm just hopping for no reason. I'm just getting the same experience
+on each DRO. Um, once you're no longer tied to desktop environments, like if you're one of these 
+people that really are invested in like menu systems and things like that, I guess it matters. But 
+for me, I I I can't DRO hop anymore. It's become a pointless activity. >> Yeah, >> you can start 
+with Nick's Darwin and then you can uh use Nyx OS fulltime. And but how often >> do you redeploy 
+your computer, Josh? And be honest, you spend like two months setting up everything in Nyx and 
+you're going to redeploy your computer every 10 years. So you just lost a lot of time there. >> No, 
+no, no, no, no. I have I have lots of servers, man. Lots of servers. >> You You got lots of servers.
+>> No, if if cuz I have um I have this laptop and I have like three other laptops at home, right? 
+So, it's really nice to be able to spin up literally the same environment on all these different 
+computers in one file. It's It's pretty sweet. I'm not going to lie. >> What What Dro did you end up
+on, DT? >> Just Arch. >> Uh, right now it's >> It started life as Arco Linux probably about three or
+four years ago, >> which Arco is no longer around, but I haven't really used the Arco repos in 
+forever. It's essentially my distribution because I I have my own repo of software and packages I 
+maintain. So it's Arch, but the Arch guys wouldn't support this thing. Like, hey, what have you done
+to this, right? I've got a lot going on. Of course, I I don't go to forums and do support requests 
+anyway. I take care of my own problems. I have for years cuz, you know, the arch guys are mean. So, 
+>> yeah, fair enough. It does seem that everybody essentially ends up at Arch or Debian pretty much 
+like it it's it's those two. >> Yeah, Debian. I've been thinking about Linux and I think I will go 
+with uh I don't know. I have no idea. I want to try Arch just for the sake of trying it, but I'm 
+more into Debian. That's what I use in all my servers. Debian all the time. They're really stable, 
+man. >> Yeah. I don't know. But um >> you can use my Nixos configuration. >> I don't know. >> 
+That'll be an experience. >> He he might prefer something else. Gen two or Slackware. >> That would 
+be >> Yeah, I heard those are complicated to install. I don't want to spend too much time. >> 
+They're a little different. >> Yeah. All right, guys. Thank you very much. Appreciate everyone time.
+No, thanks to you. >> Thanks, man. >> All right. Thank you, Christian. Appreciate it. >> Gregory 
+Joshua, nice to meet you all.
