@@ -94,28 +94,28 @@ The beauty is it piggybacks on all the work you've already done with Siphon, usi
 # Task List: LLM-as-Judge Evaluation Framework
 
 ## Phase 1: Data Preparation
-- [ ] **Extract test cases from existing cache**
+- [x] **Extract test cases from existing cache**
   - Query your PostgreSQL cache for ProcessedContent with existing synthetic_data
   - Filter for items that have Gemini-generated summaries
   - Export to test dataset format (content + ground_truth_summary + metadata)
 
-- [ ] **Create length-based buckets**
+- [x] **Create length-based buckets**
   - Implement word count binning logic (short/medium/long/very_long)
   - Sample representative cases from each bucket (aim for 10-20 per bucket)
   - Ensure diversity across content types (YouTube, GitHub, etc.)
 
 ## Phase 2: Core Evaluation Infrastructure
-- [ ] **Build model testing harness**
+- [x] **Build model testing harness**
   - Create function to generate summaries using local Ollama models
   - Add error handling for context window overflows
   - Implement timeout handling for slow models
 
-- [ ] **Design LLM-as-Judge prompts**
+- [x] **Design LLM-as-Judge prompts**
   - Create comparison prompt template (accuracy/completeness/style/preference)
   - Test prompt with a few manual examples to validate output format
   - Add response parsing to extract numerical scores
 
-- [ ] **Set up judge model**
+- [ ] **Set up judge model** ==Async==
   - Choose judge model (Gemini, Claude, or strong local model)
   - Implement judge query function with structured output parsing
   - Add retry logic for judge API failures
@@ -126,11 +126,6 @@ The beauty is it piggybacks on all the work you've already done with Siphon, usi
   - Generate local summaries with timing measurements
   - Run LLM-judge comparisons
   - Store results in structured format
-
-- [ ] **Add performance monitoring**
-  - Track tokens/second for each model
-  - Monitor VRAM usage during inference
-  - Record success/failure rates per length bucket
 
 ## Phase 4: Results & Analysis
 - [ ] **Build results aggregation**
