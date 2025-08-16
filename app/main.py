@@ -5,11 +5,12 @@ Main orchestrator for the Siphon & Chain API server.
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional, list
 from contextlib import asynccontextmanager
+from pathlib import Path
 import uvicorn
 
 # Response/request models
+from Chain import ModelAsync, Prompt, Parser, Verbosity, ChainCache
 from app.api.requests import (
     ChainRequest,
     BatchRequest,
@@ -23,15 +24,21 @@ from app.api.responses import (
 )
 
 # Utils
-from app.utils.logging import logging_config
+from app.utils.logging_config import configure_logging
 from app.utils.exceptions import ServerError
 
 # Services
 from app.services.batch_runner import run_batch
 
 # Setup logging
-logger = logging_config()
+logger = configure_logging()
 
+# Set up cache
+dir_path = Path(__file__).parent
+cached_path = dir_path / "server_cache.db"
+ModelAsync._chain_cache = ChainCache(db_path=cached_path)
+
+# Declare our FastAPI app
 app = FastAPI(
     title="Siphon & Chain API Server",
     description="Universal content ingestion and LLM processing API with GPU acceleration",
@@ -126,6 +133,7 @@ async def chain_async(
     Asynchronous batch Chain processing endpoint.
     Accepts BatchRequest; returns a list of ChainResponse or ChainError.
     """
+
     try:
         logger.info(
             f"Processing async batch with {len(batch.prompt_strings or batch.input_variables_list)} requests"
@@ -135,12 +143,12 @@ async def chain_async(
         model = ModelAsync(model=batch.model)
 
         # Optional prompt for template rendering
-        prompt: Optional[Prompt] = None
+        prompt: Prompt | None = None
         if batch.input_variables_list and hasattr(batch, "prompt_template"):
             prompt = Prompt(batch.prompt_template)
 
         # Optional parser for structured responses
-        parser: Optional[Parser] = None
+        parser: Parser | None = None
         if batch.response_model:
             parser = Parser(batch.response_model)
 
@@ -152,8 +160,7 @@ async def chain_async(
             parser=parser,
             max_concurrency=max_concurrency,
             cache=cache,
-            verbose=verbose,
-            print_response=print_response,
+            verbose=Verbosity.PROGRESS,
         )
 
         logger.info(f"Async batch completed with {len(results)} results")
