@@ -99,7 +99,7 @@ async def get_status():
         gpu_enabled = torch.cuda.is_available() if torch else False
 
         # Get available models
-        models_available = Model.models()["ollama"] if ollama_working else {}
+        models_available = Model.models()["ollama"] if ollama_working else []
 
         # What's the status?
         status = "healthy" if ollama_working and gpu_enabled else "degraded"
@@ -128,36 +128,7 @@ async def get_status():
 # Chain endpoints
 @app.post("/chain/query")
 async def chain_query(request: ChainRequest) -> ChainResponse | ChainError:
-    """
-    Synchronous Chain query endpoint.
-    Takes a ChainRequest and returns a ChainResponse OR ChainError.
-    """
-    try:
-        logger.info(f"Processing sync query for model: {request.model}")
-
-        # Create model instance
-        model = Model(request.model)
-
-        # Create Chain request
-        chain_request = ChainRequest.from_query_input(
-            query_input=request.query_input,
-            model=request.model,
-            temperature=request.temperature,
-            max_tokens=request.max_tokens,
-            response_model=request.response_model,
-        )
-
-        # Execute query
-        result = model.query(
-            request=chain_request, verbose=request.verbose, cache=request.cache
-        )
-
-        logger.info(f"Sync query completed for model: {request.model}")
-        return result
-
-    except Exception as e:
-        logger.error(f"Sync query failed: {e}")
-        return ChainError.from_exception(e, code="sync_query_error", category="server")
+    return run_sync_query(request)
 
 
 @app.post("/chain/async")
