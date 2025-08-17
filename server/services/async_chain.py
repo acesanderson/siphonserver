@@ -1,8 +1,8 @@
 from typing import Optional
 from collections.abc import Iterable
 import asyncio
+from SiphonServer.server.api.requests import BatchRequest  # your class
 from Chain.model.model_async import ModelAsync
-from Chain.request.batch_request import BatchRequest  # your class
 from Chain.parser.parser import Parser
 from Chain.chain.chain import Prompt
 from Chain.progress.verbosity import Verbosity
@@ -10,7 +10,7 @@ from Chain.result.result import ChainResult
 from Chain.result.error import ChainError
 
 
-async def run_batch(
+async def run_batch_query(
     model: ModelAsync,
     batch: BatchRequest,
     *,
@@ -20,7 +20,7 @@ async def run_batch(
     cache: bool = True,
     verbose: Verbosity = Verbosity.SILENT,
     print_response: bool = False,
-) -> List[ChainResult]:
+) -> list[ChainResult]:
     """
     Normalize BatchRequest into a list of query_async coroutines and execute them.
     Preserves order; maps unexpected exceptions to ChainError.
@@ -59,7 +59,7 @@ async def run_batch(
 
     # 3) Run and coerce unexpected exceptions to ChainError
     results = await asyncio.gather(*coros, return_exceptions=True)
-    out: List[ChainResult] = []
+    out: list[ChainResult] = []
     for r in results:
         if isinstance(r, Exception):
             out.append(

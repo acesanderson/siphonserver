@@ -1,11 +1,12 @@
 """
 ChainRequest,
 BatchRequest,
-SiphonSyntheticDataRequest,
+SyntheticDataRequest,
 """
 
 from Chain.request.request import Request as ChainRequest
-from pydantic import Field, model_validator
+from Siphon.data.Context import Context
+from pydantic import BaseModel, Field, model_validator
 
 
 class BatchRequest(ChainRequest):
@@ -34,3 +35,15 @@ class BatchRequest(ChainRequest):
                 "Provide exactly one of 'prompt_strings' or 'input_variables_list'."
             )
         return self
+
+
+class SyntheticDataRequest(BaseModel):
+    context: Context  # Has all the content + metadata
+    model: str = "gemini2.5"  # Model selection
+
+
+Requests = {
+    "ChainRequest": ChainRequest,
+    "BatchRequest": BatchRequest,
+    "SiphonSyntheticDataRequest": SyntheticDataRequest,
+}

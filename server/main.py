@@ -8,27 +8,32 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from pathlib import Path
 import uvicorn
+import time
 
-# Response/request models
-from Chain import ModelAsync, Prompt, Parser, Verbosity, ChainCache
-from app.api.requests import (
+# Project Imports
+## Models
+from SiphonServer.server.api.requests import (
     ChainRequest,
     BatchRequest,
-    SiphonSyntheticDataRequest,
+    SyntheticDataRequest,
 )
-from app.api.responses import (
+from SiphonServer.server.api.responses import (
     StatusResponse,
     ChainResponse,
     ChainError,
     SyntheticData,
 )
 
-# Utils
-from app.utils.logging_config import configure_logging
-from app.utils.exceptions import ServerError
+## Utils
+from SiphonServer.server.utils.logging_config import configure_logging
+from SiphonServer.server.utils.exceptions import ServerError
 
-# Services
-from app.services.batch_runner import run_batch
+## Services
+from SiphonServer.server.services.async_chain import run_batch_query
+from SiphonServer.server.services.sync_chain import run_sync_query
+
+# Response/request models
+from Chain import ModelAsync, Prompt, Parser, Verbosity, ChainCache
 
 # Setup logging
 logger = configure_logging()
@@ -38,12 +43,15 @@ dir_path = Path(__file__).parent
 cached_path = dir_path / "server_cache.db"
 ModelAsync._chain_cache = ChainCache(db_path=cached_path)
 
-# Declare our FastAPI app
+# Set up FastAPI app
 app = FastAPI(
     title="Siphon & Chain API Server",
     description="Universal content ingestion and LLM processing API with GPU acceleration",
     version="1.0.0",
 )
+
+# Add at module level
+startup_time = time.time()
 
 # Add CORS middleware
 app.add_middleware(
@@ -53,6 +61,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# from .... siphon
+# Declare our FastAPI app
 
 
 @asynccontextmanager
@@ -68,31 +79,55 @@ async def lifespan(app: FastAPI):
 # Status endpoint
 @app.get("/status", response_model=StatusResponse)
 async def get_status():
-    """Health check endpoint"""
     try:
-        # Test a simple model query to verify Chain is working
-        test_model = Model("llama3.1:latest")  # Local Ollama model
-        test_response = test_model.query("ping", verbose=Verbosity.SILENT)
+        from Chain import Model, Response, Verbosity
+        import torch
+
+        # Is ollama working?
+        try:
+            test_model = Model("llama3.1:latest")  # Local Ollama model
+            test_response = test_model.query("ping", verbose=Verbosity.SILENT)
+            if isinstance(test_response, Response):
+                ollama_working = True
+            else:
+                raise ValueError(f"Invalid response from Ollama model: {test_response}")
+
+        except Exception as e:
+            ollama_working = False
+
+        # Is CUDA available?
+        gpu_enabled = torch.cuda.is_available() if torch else False
+
+        # Get available models
+        models_available = Model.models()["ollama"] if ollama_working else {}
+
+        # What's the status?
+        status = "healthy" if ollama_working and gpu_enabled else "degraded"
+
+        # Uptime
+        # In your status endpoint, replace the uptime line:
+        uptime = time.time() - startup_time
 
         return StatusResponse(
-            status="healthy",
-            message="SiphonServer is running with Chain framework",
-            models_available=Model.models(),
-            gpu_enabled=True,
+            status=status,
+            gpu_enabled=gpu_enabled,
+            message="Server is running",
+            models_available=models_available,
+            uptime=uptime,
         )
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
         return StatusResponse(
-            status="degraded",
-            message=f"Issues detected: {str(e)}",
-            models_available={},
+            status="error",
             gpu_enabled=False,
+            message=f"Error retrieving status: {str(e)}",
+            models_available={},
+            uptime=None,
         )
 
 
 # Chain endpoints
 @app.post("/chain/query")
-async def chain_query(request: ChainQueryRequest) -> ChainResult:
+async def chain_query(request: ChainRequest) -> ChainResponse | ChainError:
     """
     Synchronous Chain query endpoint.
     Takes a ChainRequest and returns a ChainResponse OR ChainError.
@@ -128,7 +163,7 @@ async def chain_query(request: ChainQueryRequest) -> ChainResult:
 @app.post("/chain/async")
 async def chain_async(
     batch: BatchRequest,
-) -> list[ChainResult]:
+) -> list[ChainResponse | ChainError]:
     """
     Asynchronous batch Chain processing endpoint.
     Accepts BatchRequest; returns a list of ChainResponse or ChainError.
@@ -176,7 +211,7 @@ async def chain_async(
 
 # Siphon endpoint
 @app.post("/siphon/synthetic_data")
-async def siphon_synthetic_data(request: SiphonSyntheticDataRequest):
+async def siphon_synthetic_data(request: SyntheticDataRequest):
     """
     Generate AI enrichments (titles, summaries, descriptions).
     Takes a SyntheticDataRequest and returns SyntheticData.
@@ -210,6 +245,4 @@ async def server_error_handler(request, exc):
 
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "app.main:app", host="0.0.0.0", port=8080, reload=True, log_level="info"
-    )
+    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True, log_level="info")
