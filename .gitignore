@@ -2,3 +2,5 @@
 *.db
 /eval/chain_cache.db
 *.csv
+/__pycache__/
+*.pyc
