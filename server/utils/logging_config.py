@@ -20,7 +20,7 @@ def get_logger(name=None, level=None):
 
     # Default to the root logger if no name is provided
     if name is None:
-        name = "audio_pipeline"
+        name = "SiphonServer"
 
     if name in _loggers:
         logger = _loggers[name]
@@ -84,7 +84,7 @@ def configure_logging(
         root_logger.addHandler(console_handler)
 
     # Create the main application logger
-    logger = get_logger("audio_pipeline")
+    logger = get_logger("SiphonServer", level)
     logger.info(
         "Audio pipeline logging configured with level: %s, trace_mode: True",
         logging.getLevelName(level),

@@ -10,6 +10,7 @@ from SiphonServer.server.api.responses import (
     SyntheticData,
 )
 from SiphonServer.server.utils.logging_config import configure_logging
+from pathlib import Path
 import requests
 import json
 
@@ -57,13 +58,10 @@ class SiphonClient:
     ) -> SyntheticData | ChainError:
         """Generate synthetic data using the server"""
         response = requests.post(
-            f"{self.base_url}/synthetic/generate", json=request.model_dump()
+            f"{self.base_url}/siphon/synthetic_data", json=request.model_dump()
         )
         response.raise_for_status()
-        try:
-            return SyntheticData.model_validate_json(response.text)
-        except Exception as e:
-            return ChainError.model_validate_json(response.text)
+        return SyntheticData.model_validate_json(response.text)
 
 
 if __name__ == "__main__":
@@ -90,6 +88,26 @@ if __name__ == "__main__":
         response = client.query_sync(request)
         print(json.dumps(response.model_dump(), indent=2))
         logger.info("Synchronous query sent successfully.")
+    except requests.exceptions.HTTPError as e:
+        logger.warning(f"HTTP Error: {e}")
+    except Exception as e:
+        logger.warning(f"Error: {e}")
+
+    logger.info("Generating synthetic data...")
+    from Siphon.data.URI import URI
+    from Siphon.data.Context import Context
+
+    sample_file = Path(__file__).parent / "sample.txt"
+    uri = URI.from_source(sample_file)
+    context = Context.from_uri(uri)
+    request = SyntheticDataRequest(
+        model="llama3.1:latest",
+        context=context,
+    )
+    try:
+        synthetic_data = client.generate_synthetic_data(request)
+        print(json.dumps(synthetic_data.model_dump(), indent=2))
+        logger.info("Synthetic data generated successfully.")
     except requests.exceptions.HTTPError as e:
         logger.warning(f"HTTP Error: {e}")
     except Exception as e:

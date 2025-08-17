@@ -7,5 +7,8 @@ def generate_synthetic_data(request: SyntheticDataRequest) -> SyntheticData:
     Generate synthetic data based on the provided request.
     This function simulates the generation of synthetic data such as titles, summaries, and descriptions.
     """
-    # Simulate synthetic data generation
-    raise NotImplementedError("Synthetic data generation logic is not implemented yet.")
+    context = request.context
+    model = request.model
+    # Currently only handles text
+    synthetic_data = SyntheticData.from_context(context=context, model_str=model)
+    return synthetic_data

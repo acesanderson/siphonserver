@@ -6,6 +6,7 @@ SyntheticDataRequest,
 
 from Chain.request.request import Request as ChainRequest
 from Siphon.data.Context import Context
+from Siphon.context.context_classes import ContextUnion
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -38,7 +39,7 @@ class BatchRequest(ChainRequest):
 
 
 class SyntheticDataRequest(BaseModel):
-    context: Context  # Has all the content + metadata
+    context: ContextUnion  # Has all the content + metadata
     model: str = "gemini2.5"  # Model selection
 
 

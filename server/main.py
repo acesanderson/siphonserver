@@ -32,6 +32,7 @@ from SiphonServer.server.utils.exceptions import ServerError
 from SiphonServer.server.services.get_status import get_status_service
 from SiphonServer.server.services.chain_async import chain_async_service
 from SiphonServer.server.services.chain_sync import chain_sync_service
+from SiphonServer.server.services.generate_synthetic_data import generate_synthetic_data
 
 # Response/request models
 from Chain import ModelAsync, Prompt, Parser, Verbosity, ChainCache
