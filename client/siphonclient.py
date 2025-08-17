@@ -30,11 +30,38 @@ class SiphonClient:
     def query_sync(self, request: ChainRequest) -> ChainResponse | ChainError:
         """Send a synchronous query to the server"""
         response = requests.post(
-            f"{self.base_url}/chain/query", json=request.model_dump()
+            f"{self.base_url}/chain/sync", json=request.model_dump()
         )
         response.raise_for_status()
         try:
             return ChainResponse.model_validate_json(response.text)
+        except Exception as e:
+            return ChainError.model_validate_json(response.text)
+
+    def query_async(self, batch: BatchRequest) -> list[ChainResponse | ChainError]:
+        """Send an asynchronous batch query to the server"""
+        raise NotImplementedError(
+            "Asynchronous batch queries are not implemented in the client yet."
+        )
+        # response = requests.post(
+        #     f"{self.base_url}/chain/async", json=batch.model_dump()
+        # )
+        # response.raise_for_status()
+        # try:
+        #     return [ChainResponse.model_validate_json(item) for item in response.json()]
+        # except Exception as e:
+        #     return [ChainError.model_validate_json(item) for item in response.json()]
+
+    def generate_synthetic_data(
+        self, request: SyntheticDataRequest
+    ) -> SyntheticData | ChainError:
+        """Generate synthetic data using the server"""
+        response = requests.post(
+            f"{self.base_url}/synthetic/generate", json=request.model_dump()
+        )
+        response.raise_for_status()
+        try:
+            return SyntheticData.model_validate_json(response.text)
         except Exception as e:
             return ChainError.model_validate_json(response.text)
 

@@ -29,8 +29,9 @@ from SiphonServer.server.utils.logging_config import configure_logging
 from SiphonServer.server.utils.exceptions import ServerError
 
 ## Services
-from SiphonServer.server.services.async_chain import run_batch_query
-from SiphonServer.server.services.sync_chain import run_sync_query
+from SiphonServer.server.services.get_status import get_status_service
+from SiphonServer.server.services.chain_async import chain_async_service
+from SiphonServer.server.services.chain_sync import chain_sync_service
 
 # Response/request models
 from Chain import ModelAsync, Prompt, Parser, Verbosity, ChainCache
@@ -79,115 +80,26 @@ async def lifespan(app: FastAPI):
 # Status endpoint
 @app.get("/status", response_model=StatusResponse)
 async def get_status():
-    try:
-        from Chain import Model, Response, Verbosity
-        import torch
-
-        # Is ollama working?
-        try:
-            test_model = Model("llama3.1:latest")  # Local Ollama model
-            test_response = test_model.query("ping", verbose=Verbosity.SILENT)
-            if isinstance(test_response, Response):
-                ollama_working = True
-            else:
-                raise ValueError(f"Invalid response from Ollama model: {test_response}")
-
-        except Exception as e:
-            ollama_working = False
-
-        # Is CUDA available?
-        gpu_enabled = torch.cuda.is_available() if torch else False
-
-        # Get available models
-        models_available = Model.models()["ollama"] if ollama_working else []
-
-        # What's the status?
-        status = "healthy" if ollama_working and gpu_enabled else "degraded"
-
-        # Uptime
-        # In your status endpoint, replace the uptime line:
-        uptime = time.time() - startup_time
-
-        return StatusResponse(
-            status=status,
-            gpu_enabled=gpu_enabled,
-            message="Server is running",
-            models_available=models_available,
-            uptime=uptime,
-        )
-    except Exception as e:
-        return StatusResponse(
-            status="error",
-            gpu_enabled=False,
-            message=f"Error retrieving status: {str(e)}",
-            models_available={},
-            uptime=None,
-        )
+    return get_status_service(startup_time)
 
 
 # Chain endpoints
-@app.post("/chain/query")
-async def chain_query(request: ChainRequest) -> ChainResponse | ChainError:
-    return run_sync_query(request)
+@app.post("/chain/sync")
+async def chain_sync(request: ChainRequest) -> ChainResponse | ChainError:
+    return chain_sync_service(request)
 
 
 @app.post("/chain/async")
 async def chain_async(
     batch: BatchRequest,
 ) -> list[ChainResponse | ChainError]:
-    """
-    Asynchronous batch Chain processing endpoint.
-    Accepts BatchRequest; returns a list of ChainResponse or ChainError.
-    """
-
-    try:
-        logger.info(
-            f"Processing async batch with {len(batch.prompt_strings or batch.input_variables_list)} requests"
-        )
-
-        # Create async model
-        model = ModelAsync(model=batch.model)
-
-        # Optional prompt for template rendering
-        prompt: Prompt | None = None
-        if batch.input_variables_list and hasattr(batch, "prompt_template"):
-            prompt = Prompt(batch.prompt_template)
-
-        # Optional parser for structured responses
-        parser: Parser | None = None
-        if batch.response_model:
-            parser = Parser(batch.response_model)
-
-        # Execute batch
-        results = await run_batch(
-            model,
-            batch,
-            prompt=prompt,
-            parser=parser,
-            max_concurrency=max_concurrency,
-            cache=cache,
-            verbose=Verbosity.PROGRESS,
-        )
-
-        logger.info(f"Async batch completed with {len(results)} results")
-        return results
-
-    except Exception as e:
-        logger.error(f"Async batch failed: {e}")
-        # Return single error for the entire batch
-        return [
-            ChainError.from_exception(e, code="async_batch_error", category="server")
-        ]
+    return await chain_async_service(batch)
 
 
 # Siphon endpoint
 @app.post("/siphon/synthetic_data")
 async def siphon_synthetic_data(request: SyntheticDataRequest):
-    """
-    Generate AI enrichments (titles, summaries, descriptions).
-    Takes a SyntheticDataRequest and returns SyntheticData.
-    """
-    pass
+    return generate_synthetic_data(request)
 
 
 # Error handlers

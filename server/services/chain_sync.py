@@ -11,7 +11,7 @@ Model._chain_cache = ChainCache(cache_file)  # Initialize cache if needed
 logger = get_logger(__name__)
 
 
-def run_sync_query(request: ChainRequest) -> ChainResponse | ChainError:
+def chain_sync_service(request: ChainRequest) -> ChainResponse | ChainError:
     """
     Synchronous Chain processing function.
     Accepts ChainRequest; returns ChainResponse or ChainError.
