@@ -1,3 +1,4 @@
 *.jsonl
 *.db
 /eval/chain_cache.db
+*.csv

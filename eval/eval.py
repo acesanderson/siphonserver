@@ -29,6 +29,9 @@ with candidate_file.open("r") as f:
 # Reverse the list to evaluate the most recent candidates first
 candidate_summaries.reverse()
 
+# Where to store the evaluations
+evaluations_file = Path(__name__).parent / "evaluations.jsonl"
+
 
 # Our data class
 class Evaluation(BaseModel):
@@ -173,6 +176,12 @@ def evaluate_preference(candidate: Candidate, model: Model) -> PreferenceRespons
 
 
 if __name__ == "__main__":
+    evaluations = []
     for index, candidate_summary in enumerate(candidate_summaries):
         print(f"Evaluating candidate {index + 1}/{len(candidate_summaries)}")
         evaluation = evaluate_model(candidate_summary)
+        evaluations.append(evaluation)
+
+    with evaluations_file.open("w") as f:
+        for evaluation in evaluations:
+            f.write(evaluation.model_dump_json() + "\n")
