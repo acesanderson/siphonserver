@@ -101,7 +101,7 @@ if __name__ == "__main__":
     uri = URI.from_source(sample_file)
     context = Context.from_uri(uri)
     request = SyntheticDataRequest(
-        model="llama3.1:latest",
+        model="gpt-oss:latest",
         context=context,
     )
     try:

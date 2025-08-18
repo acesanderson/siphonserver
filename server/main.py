@@ -100,7 +100,7 @@ async def chain_async(
 # Siphon endpoint
 @app.post("/siphon/synthetic_data")
 async def siphon_synthetic_data(request: SyntheticDataRequest):
-    return generate_synthetic_data(request)
+    return await generate_synthetic_data(request)
 
 
 # Error handlers
