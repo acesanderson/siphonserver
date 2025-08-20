@@ -41,17 +41,14 @@ class SiphonClient:
 
     def query_async(self, batch: BatchRequest) -> list[ChainResponse | ChainError]:
         """Send an asynchronous batch query to the server"""
-        raise NotImplementedError(
-            "Asynchronous batch queries are not implemented in the client yet."
+        response = requests.post(
+            f"{self.base_url}/chain/async", json=batch.model_dump()
         )
-        # response = requests.post(
-        #     f"{self.base_url}/chain/async", json=batch.model_dump()
-        # )
-        # response.raise_for_status()
-        # try:
-        #     return [ChainResponse.model_validate_json(item) for item in response.json()]
-        # except Exception as e:
-        #     return [ChainError.model_validate_json(item) for item in response.json()]
+        response.raise_for_status()
+        try:
+            return [ChainResponse.model_validate_json(item) for item in response.json()]
+        except Exception as e:
+            return [ChainError.model_validate_json(item) for item in response.json()]
 
     def generate_synthetic_data(
         self, request: SyntheticDataRequest
