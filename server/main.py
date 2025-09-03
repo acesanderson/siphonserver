@@ -2,13 +2,17 @@
 Main orchestrator for the Siphon & Chain API server.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from pathlib import Path
+from pydantic import ValidationError
 import uvicorn
 import time
+import json
+
 
 # Project Imports
 ## Models
@@ -25,8 +29,8 @@ from SiphonServer.server.api.responses import (
 )
 
 ## Utils
+from SiphonServer.server.utils.exceptions import SiphonServerError, ErrorType
 from SiphonServer.server.utils.logging_config import configure_logging
-from SiphonServer.server.utils.exceptions import ServerError
 
 ## Services
 from SiphonServer.server.services.get_status import get_status_service
@@ -35,7 +39,7 @@ from SiphonServer.server.services.chain_sync import chain_sync_service
 from SiphonServer.server.services.generate_synthetic_data import generate_synthetic_data
 
 # Response/request models
-from Chain import ModelAsync, Prompt, Parser, Verbosity, ChainCache
+from Chain import ModelAsync, ChainCache
 
 # Setup logging
 logger = configure_logging()
@@ -100,32 +104,149 @@ async def chain_async(
 # Siphon endpoint
 @app.post("/siphon/synthetic_data")
 async def siphon_synthetic_data(request: SyntheticDataRequest):
-    return await generate_synthetic_data(request)
+    """Generate synthetic data with structured error handling"""
+    request_id = (
+        getattr(request.state, "request_id", "unknown")
+        if hasattr(request, "state")
+        else "unknown"
+    )
+
+    logger.info(f"[{request_id}] Received synthetic data request")
+    logger.debug(f"[{request_id}] Request model: {request.model}")
+    logger.debug(f"[{request_id}] Context type: {type(request.context).__name__}")
+    logger.debug(f"[{request_id}] Context sourcetype: {request.context.sourcetype}")
+
+    try:
+        # Log the context size to detect potential issues
+        context_length = (
+            len(request.context.context) if hasattr(request.context, "context") else 0
+        )
+        logger.debug(f"[{request_id}] Context length: {context_length} characters")
+
+        # Call the service
+        result = await generate_synthetic_data(request)
+
+        logger.info(f"[{request_id}] Successfully generated synthetic data")
+        logger.debug(
+            f"[{request_id}] Generated title: {result.title[:50]}..."
+            if result.title
+            else "No title"
+        )
+
+        return result
+
+    except ValidationError as e:
+        logger.error(f"[{request_id}] Validation error in synthetic data generation")
+
+        # Create structured error
+        error = (
+            SiphonServerError(
+                error_type=ErrorType.DATA_VALIDATION,
+                message="Synthetic data validation failed",
+                status_code=422,
+                request_id=request_id,
+                validation_errors=e.errors(),
+                original_exception=str(e),
+            )
+            .add_context("context_type", type(request.context).__name__)
+            .add_context("model", request.model)
+        )
+
+        logger.error(f"[{request_id}] Error details: {error.model_dump_json()}")
+
+        raise HTTPException(status_code=422, detail=error.model_dump())
+
+    except Exception as e:
+        logger.error(f"[{request_id}] Unexpected error: {type(e).__name__}: {str(e)}")
+
+        # Create structured error
+        error = (
+            SiphonServerError.from_general_exception(
+                e, status_code=500, include_traceback=True
+            )
+            .add_context("request_id", request_id)
+            .add_context("context_type", type(request.context).__name__)
+            .add_context("model", request.model)
+        )
+
+        logger.error(f"[{request_id}] Full error details: {error.model_dump_json()}")
+
+        raise HTTPException(status_code=500, detail=error.model_dump())
 
 
 # Error handlers
-@app.exception_handler(404)
-async def not_found_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"detail": "Endpoint not found", "path": str(request.url)},
+@app.exception_handler(422)
+async def validation_error_handler(request: Request, exc: HTTPException):
+    """Enhanced 422 handler using SiphonServerError"""
+
+    # Log request details for debugging
+    try:
+        body = await request.body()
+        if body:
+            try:
+                json_body = json.loads(body)
+                logger.error(f"Request body: {json.dumps(json_body, indent=2)}")
+            except:
+                logger.error(f"Request body (raw): {body[:500]}...")
+    except Exception as e:
+        logger.error(f"Could not read request body: {e}")
+
+    # Create structured error response
+    error = SiphonServerError(
+        error_type=ErrorType.VALIDATION_ERROR,
+        message="Request validation failed",
+        status_code=422,
+        path=str(request.url.path),
+        method=request.method,
+        request_id=getattr(request.state, "request_id", None),
+        original_exception=str(getattr(exc, "detail", "No details available")),
+    ).add_context("headers", dict(request.headers))
+
+    logger.error(f"Validation error: {error.model_dump_json()}")
+
+    return JSONResponse(status_code=422, content=error.model_dump())
+
+
+@app.exception_handler(RequestValidationError)
+async def pydantic_validation_error_handler(
+    request: Request, exc: RequestValidationError
+):
+    """Handle Pydantic validation errors with SiphonServerError"""
+
+    error = SiphonServerError.from_validation_error(
+        exc, request, include_traceback=False
+    ).add_context("error_count", len(exc.errors()))
+
+    logger.error(f"Pydantic validation error: {error.model_dump_json()}")
+
+    return JSONResponse(status_code=422, content=error.model_dump())
+
+
+@app.exception_handler(ValidationError)
+async def general_validation_error_handler(request: Request, exc: ValidationError):
+    """Handle general Pydantic ValidationErrors"""
+
+    error = SiphonServerError.from_validation_error(
+        exc, request, include_traceback=True
+    )
+    error.error_type = ErrorType.DATA_VALIDATION
+
+    logger.error(f"General validation error: {error.model_dump_json()}")
+
+    return JSONResponse(status_code=422, content=error.model_dump())
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Catch-all exception handler"""
+
+    error = SiphonServerError.from_general_exception(
+        exc, request, status_code=500, include_traceback=True
     )
 
+    logger.error(f"Unhandled exception: {error.model_dump_json()}")
 
-@app.exception_handler(500)
-async def internal_error_handler(request, exc):
-    logger.error(f"Internal server error: {exc}")
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "Internal server error", "type": str(type(exc).__name__)},
-    )
-
-
-@app.exception_handler(ServerError)
-async def server_error_handler(request, exc):
-    return JSONResponse(
-        status_code=exc.status_code, content={"detail": exc.message, "code": exc.code}
-    )
+    return JSONResponse(status_code=500, content=error.model_dump())
 
 
 if __name__ == "__main__":
