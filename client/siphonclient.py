@@ -31,8 +31,29 @@ class SiphonServerException(Exception):
 
 
 class SiphonClient:
-    def __init__(self, base_url: str = "http://localhost:8080"):
-        self.base_url = base_url.rstrip("/")
+    def __init__(self, base_url: str = ""):
+        if base_url == "":
+            self.base_url = self._get_url()
+        else:
+            self.base_url = base_url.rstrip("/")
+
+    def _get_url(self) -> str:
+        """Get SiphonServer URL with same host detection logic as PostgreSQL"""
+        endpoints = [
+            "http://localhost:8080",
+            "http://10.0.0.87:8080",
+            "http://68.47.92.102:8080",
+        ]
+
+        for url in endpoints:
+            try:
+                response = requests.get(f"{url}/status", timeout=1)
+                if response.status_code == 200:
+                    return url
+            except:
+                continue
+
+        raise ConnectionError("Cannot reach SiphonServer on any known endpoint")
 
     def _handle_error_response(self, response: requests.Response) -> None:
         """Parse SiphonServerError from response and raise appropriate exception"""
