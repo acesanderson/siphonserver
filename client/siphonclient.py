@@ -7,7 +7,10 @@ from SiphonServer.server.api.responses import (
     StatusResponse,
     ChainResponse,
     ChainError,
+)
+from Siphon.synthetic_data.synthetic_data_classes import (
     SyntheticData,
+    SyntheticDataUnion,
 )
 from SiphonServer.server.utils.logging_config import configure_logging
 from SiphonServer.server.utils.exceptions import SiphonServerError
@@ -121,7 +124,7 @@ class SiphonClient:
         except Exception as e:
             return [ChainError.model_validate_json(item) for item in response.json()]
 
-    def generate_synthetic_data(self, request) -> SyntheticData | ChainError:
+    def generate_synthetic_data(self, request) -> SyntheticDataUnion | ChainError:
         """Generate synthetic data using the server with structured error handling"""
         endpoint = f"{self.base_url}/siphon/synthetic_data"
 
@@ -155,10 +158,33 @@ class SiphonClient:
                 logger.error(f"HTTP {response.status_code} error from {endpoint}")
                 self._handle_error_response(response)
 
-            result = SyntheticData.model_validate_json(response.text)
-            logger.info(f"Successfully received synthetic data [hash: {request_hash}]")
-            return result
+            # 3. Reconstruct SyntheticData
+            from Siphon.data.types.SourceType import SourceType
 
+            json_dict = response.json()
+            synthetic_data = None
+            sourcetype = SourceType(json_dict["sourcetype"])
+            from Siphon.synthetic_data.synthetic_data_classes import (
+                SyntheticDataClasses,
+            )
+
+            # Find the right SyntheticData subclass
+            synthetic_data_class = None
+            for cls_candidate in SyntheticDataClasses:
+                if (
+                    cls_candidate.__name__.replace("SyntheticData", "")
+                    == sourcetype.value
+                ):
+                    synthetic_data_class = cls_candidate
+                    break
+
+            if not synthetic_data_class:
+                # Fallback to base SyntheticData class
+                synthetic_data_class = SyntheticData
+
+            synthetic_data = synthetic_data_class.model_validate(json_dict)
+            logger.info(f"Successfully received synthetic data [hash: {request_hash}]")
+            return synthetic_data
         except SiphonServerException:
             # Re-raise our structured exceptions
             raise
