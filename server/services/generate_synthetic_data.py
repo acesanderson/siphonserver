@@ -14,6 +14,7 @@ async def generate_synthetic_data(
     """
     context = request.context
     model = request.model
+    server_side = True
 
     # Run your existing sync function in a thread pool
     loop = asyncio.get_event_loop()
@@ -24,6 +25,7 @@ async def generate_synthetic_data(
             context,  # context argument
             False,  # local argument
             model,  # model_str argument
+            server_side,  # server_side argument
         )
 
     return synthetic_data

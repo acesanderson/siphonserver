@@ -132,6 +132,7 @@ async def siphon_synthetic_data(request: SyntheticDataRequest):
             if result.title
             else "No title"
         )
+        logger.info(result)
 
         return result
 
