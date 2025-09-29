@@ -33,5 +33,6 @@ dependencies = [
 include = ["*"]
 
 [tool.uv.sources]
-chain = { path = "../Chain", editable = true }
-database-clients = { path = "../database-clients", editable = true }
+siphon = { path = "../Siphon" }
+chain = { path = "../Chain" }
+database-clients = { path = "../database-clients" }
