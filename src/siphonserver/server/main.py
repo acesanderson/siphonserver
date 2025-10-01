@@ -250,5 +250,9 @@ async def general_exception_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content=error.model_dump())
 
 
-if __name__ == "__main__":
+def main():
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True, log_level="info")
+
+
+if __name__ == "__main__":
+    main()

@@ -31,11 +31,9 @@ log_cli_level = "INFO"
 
 # ── uv sources (local/editable deps) ───────────────────────────────────────────
 [tool.uv.sources]
-<<<<<<< HEAD
 siphon = { path = "../siphon-project", editable = true }
 conduit = { path = "../conduit-project", editable = true }
-=======
-siphon = { path = "../Siphon" }
-chain = { path = "../Chain" }
-database-clients = { path = "../database-clients" }
->>>>>>> a96e2c5fb1c4bf78c06bc4eac51e45992f90c100
+
+# ─ entry points ────────────────────────────────────────────────────────────────
+[project.scripts]
+siphonserver = "siphonserver.server.main:main"
