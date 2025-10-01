@@ -1,5 +1,5 @@
 """
-Main orchestrator for the Siphon & Chain API server.
+Main orchestrator for the Siphon & Conduit API server.
 """
 
 from fastapi import FastAPI, Request, HTTPException
@@ -16,30 +16,30 @@ import json
 
 # Project Imports
 ## Models
-from SiphonServer.server.api.requests import (
-    ChainRequest,
+from siphonserver.server.api.requests import (
+    ConduitRequest,
     BatchRequest,
     SyntheticDataRequest,
 )
-from SiphonServer.server.api.responses import (
+from siphonserver.server.api.responses import (
     StatusResponse,
-    ChainResponse,
-    ChainError,
+    ConduitResponse,
+    ConduitError,
     SyntheticData,
 )
 
 ## Utils
-from SiphonServer.server.utils.exceptions import SiphonServerError, ErrorType
-from SiphonServer.server.utils.logging_config import configure_logging
+from siphonserver.server.utils.exceptions import SiphonServerError, ErrorType
+from siphonserver.server.utils.logging_config import configure_logging
 
 ## Services
-from SiphonServer.server.services.get_status import get_status_service
-from SiphonServer.server.services.chain_async import chain_async_service
-from SiphonServer.server.services.chain_sync import chain_sync_service
-from SiphonServer.server.services.generate_synthetic_data import generate_synthetic_data
+from siphonserver.server.services.get_status import get_status_service
+from siphonserver.server.services.conduit_async import conduit_async_service
+from siphonserver.server.services.conduit_sync import conduit_sync_service
+from siphonserver.server.services.generate_synthetic_data import generate_synthetic_data
 
 # Response/request models
-from Chain import ModelAsync, ChainCache
+from conduit.batch import ModelAsync, ConduitCache
 
 # Setup logging
 logger = configure_logging()
@@ -47,11 +47,11 @@ logger = configure_logging()
 # Set up cache
 dir_path = Path(__file__).parent
 cached_path = dir_path / "server_cache.db"
-ModelAsync._chain_cache = ChainCache(db_path=cached_path)
+ModelAsync._conduit_cache = ConduitCache(db_path=cached_path)
 
 # Set up FastAPI app
 app = FastAPI(
-    title="Siphon & Chain API Server",
+    title="Siphon & Conduit API Server",
     description="Universal content ingestion and LLM processing API with GPU acceleration",
     version="1.0.0",
 )
@@ -88,17 +88,17 @@ async def get_status():
     return get_status_service(startup_time)
 
 
-# Chain endpoints
-@app.post("/chain/sync")
-async def chain_sync(request: ChainRequest) -> ChainResponse | ChainError:
-    return chain_sync_service(request)
+# Conduit endpoints
+@app.post("/conduit/sync")
+async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
+    return conduit_sync_service(request)
 
 
-@app.post("/chain/async")
-async def chain_async(
+@app.post("/conduit/async")
+async def conduit_async(
     batch: BatchRequest,
-) -> list[ChainResponse | ChainError]:
-    return await chain_async_service(batch)
+) -> list[ConduitResponse | ConduitError]:
+    return await conduit_async_service(batch)
 
 
 # Siphon endpoint

@@ -1,17 +1,17 @@
 """
-ChainRequest,
+ConduitRequest,
 BatchRequest,
 SyntheticDataRequest,
 """
 
-from Chain.request.request import Request as ChainRequest
-from Siphon.context.context_classes import ContextUnion
+from conduit.request.request import Request as ConduitRequest
+from siphon.context.context_classes import ContextUnion
 from pydantic import BaseModel, Field, model_validator
 
 
-class BatchRequest(ChainRequest):
+class BatchRequest(ConduitRequest):
     """
-    BatchRequest extends ChainRequest to allow for multiple prompt strings or input variables.
+    BatchRequest extends ConduitRequest to allow for multiple prompt strings or input variables.
     This is useful for processing multiple requests in a single API call.
     """
 
@@ -56,7 +56,7 @@ class SyntheticDataRequest(BaseModel):
             context_data = data["context"]
             if isinstance(context_data, dict):
                 # Reconstruct the right context class
-                from Siphon.context.context_classes import ContextClasses
+                from siphon.context.context_classes import ContextClasses
 
                 sourcetype_value = context_data.get("sourcetype")
 
@@ -71,7 +71,7 @@ class SyntheticDataRequest(BaseModel):
 
 
 Requests = {
-    "ChainRequest": ChainRequest,
+    "ConduitRequest": ConduitRequest,
     "BatchRequest": BatchRequest,
     "SiphonSyntheticDataRequest": SyntheticDataRequest,
 }

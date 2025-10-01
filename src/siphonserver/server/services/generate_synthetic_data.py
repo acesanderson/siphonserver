@@ -1,8 +1,8 @@
 # In server/services/generate_synthetic_data.py
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from SiphonServer.server.api.requests import SyntheticDataRequest
-from Siphon.data.SyntheticData import SyntheticData
+from siphonserver.server.api.requests import SyntheticDataRequest
+from siphon.data.synthetic_data import SyntheticData
 
 
 async def generate_synthetic_data(

@@ -1,9 +1,9 @@
-from SiphonServer.server.api.requests import (
-    ChainRequest,
+from siphonserver.server.api.requests import (
+    ConduitRequest,
     SyntheticDataRequest,
 )
-from SiphonServer.client.siphonclient import SiphonClient
-from SiphonServer.server.utils.logging_config import configure_logging
+from siphonserver.client.siphonclient import SiphonClient
+from siphonserver.server.utils.logging_config import configure_logging
 import json
 import requests
 from pathlib import Path
@@ -29,7 +29,7 @@ def test_status():
 def test_query_sync():
     logger.info("Sending synchronous query...")
     try:
-        request = ChainRequest.from_query_input(
+        request = ConduitRequest.from_query_input(
             model="llama3.1:latest",
             query_input="Tell me a joke about llamas",
         )
@@ -43,8 +43,8 @@ def test_query_sync():
 
 
 def test_query_async_prompt_strings():
-    from SiphonServer.server.api.requests import BatchRequest
-    from Chain.message.textmessage import TextMessage
+    from siphonserver.server.api.requests import BatchRequest
+    from Conduit.message.textmessage import TextMessage
 
     prompt_strings = [
         "What is the capital of France?",

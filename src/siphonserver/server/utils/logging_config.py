@@ -85,9 +85,5 @@ def configure_logging(
 
     # Create the main application logger
     logger = get_logger("SiphonServer", level)
-    logger.info(
-        "Audio pipeline logging configured with level: %s, trace_mode: True",
-        logging.getLevelName(level),
-    )
 
     return logger

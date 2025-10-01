@@ -1,4 +1,4 @@
-from Chain import Model, Prompt, Chain, Verbosity
+from Conduit.sync import Model, Prompt, Conduit, Verbosity
 from contextlib import contextmanager
 from rich.console import Console
 import pandas as pd
@@ -35,7 +35,7 @@ def test_model(model_str: str) -> tuple:
 
     # Cold boot -- loading the model for the first time
     cold_prompt = Prompt("Tell me a joke.")
-    cold_chain = Chain(prompt=cold_prompt, model=model)
+    cold_chain = Conduit(prompt=cold_prompt, model=model)
     cold_boot_start = time.time()
     try:
         print("Cold boot:")
@@ -50,7 +50,7 @@ def test_model(model_str: str) -> tuple:
 
     # Warm boot -- model should already be loaded -- this is what we care about
     warm_prompt = Prompt("Name three North american birds.")
-    warm_chain = Chain(prompt=warm_prompt, model=model)
+    warm_chain = Conduit(prompt=warm_prompt, model=model)
     warm_boot_start = time.time()
     try:
         print("Warm boot:")

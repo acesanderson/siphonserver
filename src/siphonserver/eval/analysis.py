@@ -1,4 +1,4 @@
-from SiphonServer.eval.eval import evaluations_file, Evaluation
+from siphonserver.eval.eval import evaluations_file, Evaluation
 from pathlib import Path
 import pandas as pd
 

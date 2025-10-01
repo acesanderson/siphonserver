@@ -3,35 +3,33 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "SiphonServer"
+name = "siphonserver"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.12"
 dependencies = [
-    "anthropic>=0.64.0",
-    "chain>=1.0",
-    "database-clients",
+    "conduit",
     "fastapi>=0.116.1",
     "google-genai>=1.32.0",
-    "instructor>=1.10.0",
-    "jinja2>=3.1.6",
-    "ollama>=0.5.3",
-    "openai>=1.99.9",
-    "pillow>=11.3.0",
-    "psycopg2-binary>=2.9.10",
-    "pydantic>=2.11.7",
     "pytest>=8.4.1",
-    "python-dotenv>=1.1.1",
     "rich>=14.1.0",
     "siphon>=0.10.0",
-    "tiktoken>=0.11.0",
-    "tinydb>=4.8.2",
     "uvicorn>=0.35.0",
 ]
 
+# ── Hatchling (build) ──────────────────────────────────────────────────────────
+# Point Hatchling at the src/ package; this is the critical bit for src-layout.
 [tool.hatch.build.targets.wheel]
-include = ["*"]
+packages = ["src/siphonserver"]
+sources = ["src"]
 
+# ── Pytest ─────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+addopts = "-v -s --tb=short --no-header --showlocals --pdb -x"
+log_cli = true
+log_cli_level = "INFO"
+
+# ── uv sources (local/editable deps) ───────────────────────────────────────────
 [tool.uv.sources]
-chain = { path = "../Chain", editable = true }
-database-clients = { path = "../database-clients", editable = true }
+siphon = { path = "../siphon-project", editable = true }
+conduit = { path = "../conduit-project", editable = true }

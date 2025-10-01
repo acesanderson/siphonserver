@@ -1,13 +1,13 @@
 """
 StatusResponse,
-ChainResponse,
-ChainError,
+ConduitResponse,
+ConduitError,
 SyntheticData,
 """
 
-from Chain.result.response import Response as ChainResponse
-from Chain.result.error import ChainError
-from Siphon.data.SyntheticData import SyntheticData
+from conduit.result.response import Response as ConduitResponse
+from conduit.result.error import ConduitError
+from siphon.data.synthetic_data import SyntheticData
 from pydantic import BaseModel, Field
 
 
@@ -25,7 +25,7 @@ class StatusResponse(BaseModel):
 
 Responses = {
     "StatusResponse": StatusResponse,
-    "ChainResponse": ChainResponse,
-    "ChainError": ChainError,
+    "ConduitResponse": ConduitResponse,
+    "ConduitError": ConduitError,
     "SyntheticData": SyntheticData,
 }

@@ -1,4 +1,4 @@
-from Siphon.database.postgres.PGRES_processed_content import get_all_siphon
+from siphon.database.postgres.PGRES_processed_content import get_all_siphon
 
 
 ss = get_all_siphon()
