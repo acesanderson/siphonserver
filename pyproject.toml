@@ -12,6 +12,9 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "pytest>=8.4.1",
     "rich>=14.1.0",
+    "uvicorn",
+    "conduit",
+    "siphon",
 ]
 
 # ── Hatchling (build) ──────────────────────────────────────────────────────────
