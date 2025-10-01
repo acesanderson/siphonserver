@@ -1,13 +1,15 @@
 from training import datasets
 from pydantic import BaseModel
-from Chain import Model, Prompt, Chain, ChainCache
+from Conduit.sync import Model, Prompt, Conduit, ConduitCache
 from pathlib import Path
 
 # Set up cache
-Model._chain_cache = ChainCache()
+Model._chain_cache = ConduitCache()
 
 # Load prompt templates from the specified directory
-prompts_dir = Path("/home/fishhouses/Brian_Code/Siphon/prompts/synthetic_data")
+prompts_dir = Path(
+    "/home/fishhouses/Brian_Code/siphon-project/src/siphon/prompts/synthetic_data"
+)
 prompt_files = prompts_dir.glob("*.jinja2")
 # Generate a dictionary of prompt strings by sourcetype
 prompt_dicts = {}
@@ -65,7 +67,7 @@ def generate_candidate_summary(model_str: str, data: dict) -> Candidate:
     # Construct our chain
     prompt = Prompt(prompt_dicts[sourcetype.lower()])
     model = Model(model=model_str)
-    chain = Chain(prompt=prompt, model=model)
+    chain = Conduit(prompt=prompt, model=model)
     response = chain.run(input_variables=data)
     candidate = Candidate(
         model_str=model_str,

@@ -1,17 +1,17 @@
-from SiphonServer.server.api.requests import (
-    ChainRequest,
+from siphonserver.server.api.requests import (
+    ConduitRequest,
     BatchRequest,
 )
-from SiphonServer.server.api.responses import (
-    ChainResponse,
-    ChainError,
+from siphonserver.server.api.responses import (
+    ConduitResponse,
+    ConduitError,
 )
-from Siphon.synthetic_data.synthetic_data_classes import (
+from siphon.synthetic_data.synthetic_data_classes import (
     SyntheticData,
     SyntheticDataUnion,
 )
-from SiphonServer.server.utils.logging_config import configure_logging
-from SiphonServer.server.utils.exceptions import SiphonServerError
+from siphonserver.server.utils.logging_config import configure_logging
+from siphonserver.server.utils.exceptions import SiphonServerError
 from dbclients import get_network_context
 import requests
 import json
@@ -91,29 +91,31 @@ class SiphonClient:
         response.raise_for_status()
         return response.json()
 
-    def query_sync(self, request: ChainRequest) -> ChainResponse | ChainError:
+    def query_sync(self, request: ConduitRequest) -> ConduitResponse | ConduitError:
         """Send a synchronous query to the server"""
         response = requests.post(
-            f"{self.base_url}/chain/sync", json=request.model_dump()
+            f"{self.base_url}/conduit/sync", json=request.model_dump()
         )
         response.raise_for_status()
         try:
-            return ChainResponse.model_validate_json(response.text)
+            return ConduitResponse.model_validate_json(response.text)
         except Exception as e:
-            return ChainError.model_validate_json(response.text)
+            return ConduitError.model_validate_json(response.text)
 
-    def query_async(self, batch: BatchRequest) -> list[ChainResponse | ChainError]:
+    def query_async(self, batch: BatchRequest) -> list[ConduitResponse | ConduitError]:
         """Send an asynchronous batch query to the server"""
         response = requests.post(
-            f"{self.base_url}/chain/async", json=batch.model_dump()
+            f"{self.base_url}/conduit/async", json=batch.model_dump()
         )
         response.raise_for_status()
         try:
-            return [ChainResponse.model_validate_json(item) for item in response.json()]
+            return [
+                ConduitResponse.model_validate_json(item) for item in response.json()
+            ]
         except Exception as e:
-            return [ChainError.model_validate_json(item) for item in response.json()]
+            return [ConduitError.model_validate_json(item) for item in response.json()]
 
-    def generate_synthetic_data(self, request) -> SyntheticDataUnion | ChainError:
+    def generate_synthetic_data(self, request) -> SyntheticDataUnion | ConduitError:
         """Generate synthetic data using the server with structured error handling"""
         endpoint = f"{self.base_url}/siphon/synthetic_data"
 
@@ -148,12 +150,12 @@ class SiphonClient:
                 self._handle_error_response(response)
 
             # 3. Reconstruct SyntheticData
-            from Siphon.data.types.SourceType import SourceType
+            from siphon.data.types.SourceType import SourceType
 
             json_dict = response.json()
             synthetic_data = None
             sourcetype = SourceType(json_dict["sourcetype"])
-            from Siphon.synthetic_data.synthetic_data_classes import (
+            from siphon.synthetic_data.synthetic_data_classes import (
                 SyntheticDataClasses,
             )
 

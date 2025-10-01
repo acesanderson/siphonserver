@@ -5,7 +5,7 @@ from prompts.response_classes import (
     PreferenceResponse,
     StyleResponse,
 )
-from Chain import Model, Prompt, Chain, Parser
+from Conduit.sync import Model, Prompt, Conduit, Parser
 from pathlib import Path
 from pydantic import BaseModel
 
@@ -116,7 +116,7 @@ def evaluate_completeness(candidate: Candidate, model: Model) -> CompletenessRes
     # Build our chain
     prompt = Prompt(prompt_dict["completeness"])
     parser = Parser(CompletenessResponse)
-    chain = Chain(model=model, prompt=prompt, parser=parser)
+    chain = Conduit(model=model, prompt=prompt, parser=parser)
     response = chain.run(input_variables=input_variables)
     return response.content
 
@@ -134,7 +134,7 @@ def evaluate_accuracy(candidate: Candidate, model: Model) -> AccuracyResponse:
     # Build our chain
     prompt = Prompt(prompt_dict["accuracy"])
     parser = Parser(AccuracyResponse)
-    chain = Chain(model=model, prompt=prompt, parser=parser)
+    chain = Conduit(model=model, prompt=prompt, parser=parser)
     response = chain.run(input_variables=input_variables)
     return response.content
 
@@ -152,7 +152,7 @@ def evaluate_style(candidate: Candidate, model: Model) -> StyleResponse:
     # Build our chain
     prompt = Prompt(prompt_dict["style"])
     parser = Parser(StyleResponse)
-    chain = Chain(model=model, prompt=prompt, parser=parser)
+    chain = Conduit(model=model, prompt=prompt, parser=parser)
     response = chain.run(input_variables=input_variables)
     return response.content
 
@@ -170,7 +170,7 @@ def evaluate_preference(candidate: Candidate, model: Model) -> PreferenceRespons
     # Build our chain
     prompt = Prompt(prompt_dict["preference"])
     parser = Parser(PreferenceResponse)
-    chain = Chain(model=model, prompt=prompt, parser=parser)
+    chain = Conduit(model=model, prompt=prompt, parser=parser)
     response = chain.run(input_variables=input_variables)
     return response.content
 

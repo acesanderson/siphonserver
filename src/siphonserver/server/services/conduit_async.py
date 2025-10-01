@@ -1,17 +1,17 @@
-from SiphonServer.server.api.requests import BatchRequest  # your class
-from Chain.chain.asyncchain import AsyncChain
-from Chain.model.model_async import ModelAsync
-from Chain.chain.chain import Prompt
-from Chain.progress.verbosity import Verbosity
-from Chain.result.result import ChainResult
+from siphonserver.server.api.requests import BatchRequest  # your class
+from conduit.conduit.async_conduit import AsyncConduit
+from conduit.model.model_async import ModelAsync
+from conduit.prompt.prompt import Prompt
+from conduit.progress.verbosity import Verbosity
+from conduit.result.result import ConduitResult
 from functools import partial
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
 
-async def chain_async_service(
+async def conduit_async_service(
     batch: BatchRequest,
-) -> list[ChainResult]:
+) -> list[ConduitResult]:
     """
     Normalize BatchRequest into a list of query_async coroutines and execute them.
     """
@@ -22,16 +22,16 @@ async def chain_async_service(
     model = ModelAsync(model_str)
     if prompt_str and input_variables_list:
         prompt = Prompt(prompt_str)
-        chain = AsyncChain(model=model, prompt=prompt)
+        conduit = AsyncConduit(model=model, prompt=prompt)
         func_for_executor = partial(
-            chain.run,
+            conduit.run,
             input_variables_list=input_variables_list,
             verbose=Verbosity.PROGRESS,
         )
     elif prompt_strings:
-        chain = AsyncChain(model=model)
+        conduit = AsyncConduit(model=model)
         func_for_executor = partial(
-            chain.run,
+            conduit.run,
             prompt_strings=prompt_strings,
             verbose=Verbosity.PROGRESS,
         )
@@ -41,7 +41,7 @@ async def chain_async_service(
         )
     assert func_for_executor is not None, "Function for executor should not be None"
     # Run the following in a thread pool to avoid blocking the event loop
-    ## chain.run(input_variables_list=input_variables_list, verbosity=Verbosity.PROGRESS)
+    ## conduit.run(input_variables_list=input_variables_list, verbosity=Verbosity.PROGRESS)
     loop = asyncio.get_event_loop()
     with ThreadPoolExecutor() as executor:
         results = await loop.run_in_executor(
