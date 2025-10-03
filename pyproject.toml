@@ -8,12 +8,13 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.12"
 dependencies = [
-    "conduit",
     "fastapi>=0.116.1",
+    "psycopg2-binary>=2.9.10",
     "pytest>=8.4.1",
     "rich>=14.1.0",
-    "siphon>=0.10.0",
-    "uvicorn>=0.35.0",
+    "uvicorn",
+    "conduit",
+    "siphon",
 ]
 
 # ── Hatchling (build) ──────────────────────────────────────────────────────────
