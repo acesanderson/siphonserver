@@ -49,15 +49,31 @@ dir_path = Path(__file__).parent
 cached_path = dir_path / "server_cache.db"
 ModelAsync._conduit_cache = ConduitCache(db_path=cached_path)
 
+# Add at module level
+startup_time = time.time()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("🚀 SiphonServer starting up...")
+    logger.info("🔥 GPU acceleration enabled for local models")
+    from conduit.sync import Model
+
+    _ = Model._odometer_registry  # Initialize to load models and GPU resource
+
+    yield
+    # Shutdown
+    logger.info("🛑 SiphonServer shutting down...")
+
+
 # Set up FastAPI app
 app = FastAPI(
     title="Siphon & Conduit API Server",
     description="Universal content ingestion and LLM processing API with GPU acceleration",
     version="1.0.0",
+    lifespan=lifespan,
 )
-
-# Add at module level
-startup_time = time.time()
 
 # Add CORS middleware
 app.add_middleware(
@@ -67,19 +83,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# from .... siphon
-# Declare our FastAPI app
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    logger.info("🚀 SiphonServer starting up...")
-    logger.info("🔥 GPU acceleration enabled for local models")
-    yield
-    # Shutdown
-    logger.info("🛑 SiphonServer shutting down...")
 
 
 # Status endpoint
@@ -254,12 +257,16 @@ def main():
     """Run the Uvicorn server"""
     from siphonserver.server.logo import print_logo
 
+    watch_directory = str(Path(__file__).parent.parent.parent)
+
     print_logo()
+
     uvicorn.run(
         "siphonserver.server.main:app",
         host="0.0.0.0",
         port=8080,
         reload=True,
+        reload_dirs=[watch_directory],  # Watch the project directory for changes
         log_level="info",
     )
 
