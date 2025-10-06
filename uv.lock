@@ -835,7 +835,6 @@ dependencies = [
     { name = "pymongo" },
     { name = "pytest" },
     { name = "requests" },
-    { name = "rich" },
 ]
 
 [package.metadata]
@@ -845,7 +844,6 @@ requires-dist = [
     { name = "pymongo", specifier = ">=4.14.1" },
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "requests", specifier = ">=2.32.5" },
-    { name = "rich" },
 ]
 
 [[package]]
