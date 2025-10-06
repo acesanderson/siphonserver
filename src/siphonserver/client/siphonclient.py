@@ -150,7 +150,7 @@ class SiphonClient:
                 self._handle_error_response(response)
 
             # 3. Reconstruct SyntheticData
-            from siphon.data.types.SourceType import SourceType
+            from siphon.data.type_definitions.source_type import SourceType
 
             json_dict = response.json()
             synthetic_data = None

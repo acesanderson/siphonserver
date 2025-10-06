@@ -4166,6 +4166,7 @@ source = { editable = "../siphon-project" }
 dependencies = [
     { name = "anthropic" },
     { name = "chromadb" },
+    { name = "conduit" },
     { name = "database-clients" },
     { name = "fastapi" },
     { name = "google-genai" },
@@ -4188,6 +4189,7 @@ dependencies = [
     { name = "rerankers" },
     { name = "rich" },
     { name = "sentence-transformers" },
+    { name = "siphonserver" },
     { name = "tiktoken" },
     { name = "tinydb" },
     { name = "torch" },
@@ -4203,6 +4205,7 @@ dependencies = [
 requires-dist = [
     { name = "anthropic", specifier = ">=0.57.1" },
     { name = "chromadb" },
+    { name = "conduit", editable = "../conduit-project" },
     { name = "database-clients", editable = "../database-clients" },
     { name = "fastapi" },
     { name = "google-genai" },
@@ -4225,6 +4228,7 @@ requires-dist = [
     { name = "rerankers" },
     { name = "rich" },
     { name = "sentence-transformers" },
+    { name = "siphonserver", editable = "." },
     { name = "tiktoken", specifier = ">=0.9.0" },
     { name = "tinydb", specifier = ">=4.8.2" },
     { name = "torch" },
