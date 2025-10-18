@@ -20,13 +20,12 @@ from siphonserver.server.api.requests import (
     ConduitRequest,
     BatchRequest,
     SyntheticDataRequest,
-    EmbeddingsResponse,
+    EmbeddingsRequest,
 )
 from siphonserver.server.api.responses import (
     StatusResponse,
     ConduitResponse,
     ConduitError,
-    SyntheticData,
     EmbeddingsResponse,
 )
 
@@ -39,6 +38,7 @@ from siphonserver.server.services.get_status import get_status_service
 from siphonserver.server.services.conduit_async import conduit_async_service
 from siphonserver.server.services.conduit_sync import conduit_sync_service
 from siphonserver.server.services.generate_synthetic_data import generate_synthetic_data
+from siphonserver.server.services.generate_embeddings import generate_embeddings_service
 
 # Response/request models
 from conduit.batch import ModelAsync, ConduitCache
@@ -180,19 +180,10 @@ async def siphon_synthetic_data(request: SyntheticDataRequest):
         raise HTTPException(status_code=500, detail=error.model_dump())
 
 
-# @app.post("/conduit/embeddings")
-# async def siphon_synthetic_data(request: SyntheticDataRequest):
-#     """Generate synthetic data with structured error handling"""
-#     request_id = (
-#         getattr(request.state, "request_id", "unknown")
-#         if hasattr(request, "state")
-#         else "unknown"
-#     )
-#
-#     logger.info(f"[{request_id}] Received synthetic data request")
-#     logger.debug(f"[{request_id}] Request model: {request.model}")
-#     logger.debug(f"[{request_id}] Context type: {type(request.context).__name__}")
-#     logger.debug(f"[{request_id}] Context sourcetype: {request.context.sourcetype}")
+@app.post("/conduit/embeddings")
+async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
+    """Generate synthetic data with structured error handling"""
+    return await generate_embeddings_service(request)
 
 
 # Error handlers

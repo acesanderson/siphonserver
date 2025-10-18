@@ -5,6 +5,7 @@ SyntheticDataRequest,
 """
 
 from conduit.request.request import Request as ConduitRequest
+from conduit.embeddings.chroma_batch import ChromaBatch
 from siphon.context.context_classes import ContextUnion
 from pydantic import BaseModel, Field, model_validator
 from typing import Any
@@ -71,28 +72,12 @@ class SyntheticDataRequest(BaseModel):
         return data
 
 
-# Now embeddings request
-class DocumentBatch(BaseModel):
-    ids: list[str] = Field(
-        ...,
-        description="List of document IDs corresponding to the texts.",
-    )
-    documents: list[str] = Field(
-        ...,
-        description="List of documents/texts to generate embeddings for.",
-    )
-    metadatas: list[dict[str, Any]] | None = Field(
-        None,
-        description="Optional list of metadata dictionaries for each document.",
-    )
-
-
 class EmbeddingsRequest(BaseModel):
     model: str = Field(
         ...,
         description="The embedding model to use for generating embeddings.",
     )
-    batch: DocumentBatch = Field(
+    batch: ChromaBatch = Field(
         ...,
         description="Batch of documents to generate embeddings for.",
     )
@@ -102,6 +87,5 @@ Requests = {
     "ConduitRequest": ConduitRequest,
     "BatchRequest": BatchRequest,
     "SiphonSyntheticDataRequest": SyntheticDataRequest,
-    "DocumentBatch": DocumentBatch,
     "EmbeddingsRequest": EmbeddingsRequest,
 }
