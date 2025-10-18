@@ -23,9 +23,18 @@ class StatusResponse(BaseModel):
     uptime: float | None = Field(None, description="Server uptime in seconds")
 
 
+class EmbeddingsResponse(BaseModel):
+    """Response model for embeddings generation"""
+
+    embeddings: list[list[float]] = Field(
+        ..., description="List of generated embeddings"
+    )
+
+
 Responses = {
     "StatusResponse": StatusResponse,
     "ConduitResponse": ConduitResponse,
     "ConduitError": ConduitError,
     "SyntheticData": SyntheticData,
+    "EmbeddingsResponse": EmbeddingsResponse,
 }
