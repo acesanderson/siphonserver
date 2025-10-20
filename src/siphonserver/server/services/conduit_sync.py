@@ -2,11 +2,9 @@ from conduit.sync import Model, Verbosity, ConduitCache
 from siphonserver.server.api.requests import ConduitRequest
 from siphonserver.server.api.responses import ConduitResponse, ConduitError
 from siphonserver.server.utils.logging_config import get_logger
-from pathlib import Path
 
 # Set up cache
-cache_file = Path(__file__).parent / ".server_cache.db"
-Model._conduit_cache = ConduitCache(cache_file)  # Initialize cache if needed
+Model.conduit_cache = ConduitCache(name="siphonserver")  # Initialize cache if needed
 # Set up logger
 logger = get_logger(__name__)
 

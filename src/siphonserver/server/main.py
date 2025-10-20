@@ -47,9 +47,7 @@ from conduit.batch import ModelAsync, ConduitCache
 logger = configure_logging()
 
 # Set up cache
-dir_path = Path(__file__).parent
-cached_path = dir_path / "server_cache.db"
-ModelAsync._conduit_cache = ConduitCache(db_path=cached_path)
+ModelAsync.conduit_cache = ConduitCache(name="siphonserver")
 
 # Add at module level
 startup_time = time.time()
