@@ -1,10 +1,13 @@
 from siphonserver.server.api.requests import (
     ConduitRequest,
     BatchRequest,
+    SyntheticDataRequest,
+    EmbeddingsRequest,
 )
 from siphonserver.server.api.responses import (
     ConduitResponse,
     ConduitError,
+    EmbeddingsResponse,
 )
 from siphon.synthetic_data.synthetic_data_classes import (
     SyntheticData,
@@ -115,7 +118,9 @@ class SiphonClient:
         except Exception as e:
             return [ConduitError.model_validate_json(item) for item in response.json()]
 
-    def generate_synthetic_data(self, request) -> SyntheticDataUnion | ConduitError:
+    def generate_synthetic_data(
+        self, request: SyntheticDataRequest
+    ) -> SyntheticDataUnion | ConduitError:
         """Generate synthetic data using the server with structured error handling"""
         endpoint = f"{self.base_url}/siphon/synthetic_data"
 
@@ -189,3 +194,21 @@ class SiphonClient:
             logger.error(f"Unexpected error: {e}")
             logger.error(f"Error type: {type(e).__name__}")
             raise
+
+    def generate_embeddings(
+        self,
+        request: EmbeddingsRequest,
+    ) -> EmbeddingsResponse | ConduitError:
+        """
+        Generate embeddings using the server.
+        """
+        response = requests.post(
+            f"{self.base_url}/conduit/embeddings",
+            json=request.model_dump(),
+        )
+        response.raise_for_status()
+        try:
+            return EmbeddingsResponse.model_validate_json(response.text)
+
+        except Exception as e:
+            return ConduitError.model_validate_json(response.text)

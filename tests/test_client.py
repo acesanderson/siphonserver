@@ -1,6 +1,7 @@
 from siphonserver.server.api.requests import (
     ConduitRequest,
     SyntheticDataRequest,
+    EmbeddingsRequest,
 )
 from siphonserver.client.siphonclient import SiphonClient
 from siphonserver.server.utils.logging_config import configure_logging
@@ -44,7 +45,7 @@ def test_query_sync():
 
 def test_query_async_prompt_strings():
     from siphonserver.server.api.requests import BatchRequest
-    from Conduit.message.textmessage import TextMessage
+    from conduit.message.textmessage import TextMessage
 
     prompt_strings = [
         "What is the capital of France?",
@@ -74,8 +75,8 @@ def test_generate_synthetic_data():
     Test the generation of synthetic data using a sample file.
     """
     logger.info("Generating synthetic data...")
-    from Siphon.data.URI import URI
-    from Siphon.data.Context import Context
+    from siphon.data.uri import URI
+    from siphon.data.context import Context
 
     sample_file = Path(__file__).parent / "sample.txt"
     uri = URI.from_source(sample_file)
@@ -88,6 +89,32 @@ def test_generate_synthetic_data():
         synthetic_data = client.generate_synthetic_data(request)
         print(json.dumps(synthetic_data.model_dump(), indent=2))
         logger.info("Synthetic data generated successfully.")
+    except requests.exceptions.HTTPError as e:
+        logger.warning(f"HTTP Error: {e}")
+    except Exception as e:
+        logger.warning(f"Error: {e}")
+
+
+def test_generate_embeddings():
+    logger.info("Generating embeddings...")
+    from conduit.embeddings.chroma_batch import ChromaBatch
+
+    model = "sentence-transformers/all-MiniLM-L6-v2"
+    batch = ChromaBatch(
+        ids=["1", "2"],
+        documents=["This is a test document.", "This is another test document."],
+        metadatas=[{}, {}],
+    )
+
+    request = EmbeddingsRequest(
+        model=model,
+        batch=batch,
+    )
+
+    try:
+        response = client.generate_embeddings(request)
+        print(json.dumps(response.model_dump(), indent=2))
+        logger.info("Embeddings generated successfully.")
     except requests.exceptions.HTTPError as e:
         logger.warning(f"HTTP Error: {e}")
     except Exception as e:

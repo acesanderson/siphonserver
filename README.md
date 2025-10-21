@@ -1,228 +1,169 @@
 # SiphonServer
 
-High-performance GPU-accelerated API server for distributed content processing and LLM operations. Built on Siphon's universal content ingestion and Chain's LLM orchestration.
+## Project Purpose
 
-## Architecture Problem
+SiphonServer is a FastAPI-based server that provides unified HTTP endpoints for LLM processing and synthetic data generation. It wraps two core libraries—Conduit (for LLM chain orchestration) and Siphon (for content ingestion)—exposing both synchronous and asynchronous query endpoints along with GPU-accelerated local model execution. The server handles request validation, error formatting, and caching while providing a client library for programmatic access.
 
-**Why SiphonServer exists:** While Siphon and Chain work excellently for local processing, certain workloads benefit from centralized GPU resources, async batch processing, and shared caching. SiphonServer addresses these specific use cases without replacing the core libraries.
+## Architecture Overview
 
-## Core Value Propositions
+- **server.main**: FastAPI application orchestrator with lifecycle management, CORS middleware, and centralized exception handlers
+- **server.services.conduit_sync**: Synchronous LLM query processing using Conduit's Model interface
+- **server.services.conduit_async**: Asynchronous batch query processing with thread pool execution for non-blocking operations
+- **server.services.generate_synthetic_data**: Async wrapper around Siphon's synthetic data generation from context objects
+- **server.services.get_status**: Health check service reporting model availability, GPU status, and uptime
+- **server.api.requests**: Request models including ConduitRequest, BatchRequest, and SyntheticDataRequest with validation
+- **server.api.responses**: Response models wrapping Conduit results, errors, and server status
+- **server.utils.exceptions**: Structured error handling with SiphonServerError and ErrorType enumeration
+- **server.utils.logging_config**: Centralized logging configuration with per-module logger management
+- **client.siphonclient**: Python client library providing typed HTTP methods and automatic error deserialization
+- **eval**: Model evaluation suite for comparing LLM outputs against gold standards across multiple dimensions
 
-### 1. GPU Acceleration Pool
-Centralize expensive GPU resources for multiple clients:
-```bash
-# Client sends CPU-intensive work to GPU server
-curl -X POST http://server:8080/siphon/synthetic_data \
-  -d '{"context": {...}, "model": "llama3.3:latest"}'
-```
+## Dependencies
 
-### 2. Async Batch Processing
-Process multiple requests concurrently:
+**Major Dependencies:**
+- `fastapi`: Web framework for API server
+- `uvicorn`: ASGI server for FastAPI
+- `pydantic`: Data validation and serialization
+- `requests`: HTTP client library
+- `torch`: PyTorch for GPU detection and acceleration
+- `pandas`: Data analysis for evaluation module
+
+**Local/Internal Dependencies:**
+- `conduit`: LLM chain orchestration library (sync/async models, prompts, parsers, caching)
+- `siphon`: Content ingestion and synthetic data generation library
+- `dbclients`: Database client utilities providing network context
+
+## API Documentation
+
+### SiphonClient
+
+**`__init__(base_url: str = "")`**
+Initialize client with optional custom base URL. Defaults to network context configuration.
+
+**`get_status() -> dict`**
+Retrieve server health status including available models, GPU state, and uptime.
+
+**`query_sync(request: ConduitRequest) -> ConduitResponse | ConduitError`**
+Execute synchronous LLM query. Returns structured response or error object.
+
+**`query_async(batch: BatchRequest) -> list[ConduitResponse | ConduitError]`**
+Execute asynchronous batch queries with multiple prompts or input variable sets.
+
+**`generate_synthetic_data(request: SyntheticDataRequest) -> SyntheticDataUnion | ConduitError`**
+Generate synthetic data (title, summary, descriptions) from context object using specified model.
+
+### Server Endpoints
+
+**`GET /status`**
+Returns StatusResponse with server health, model availability, GPU status, and uptime.
+
+**`POST /conduit/sync`**
+Accepts ConduitRequest, returns ConduitResponse or ConduitError for single LLM query.
+
+**`POST /conduit/async`**
+Accepts BatchRequest with multiple prompts or input variables, returns list of results.
+
+**`POST /siphon/synthetic_data`**
+Accepts SyntheticDataRequest with context object, returns SyntheticData subclass matching source type.
+
+### Request Models
+
+**`ConduitRequest`**
+- `model: str` - Model identifier (e.g., "llama3.1:latest", "gpt-oss:latest")
+- `prompt_str: str` - Template string or direct prompt
+- `input_variables: dict[str, str]` - Variables for template rendering
+
+**`BatchRequest(ConduitRequest)`**
+- `prompt_strings: list[str]` - Multiple fully-rendered prompts
+- `input_variables_list: list[dict[str, str]]` - Multiple variable sets for single template
+- Validates exactly one of prompt_strings or input_variables_list is provided
+
+**`SyntheticDataRequest`**
+- `context: ContextUnion` - Siphon context object (file, URL, database record)
+- `model: str` - Model to use for generation (default: "gemini2.5")
+
+### Error Handling
+
+**`SiphonServerError`**
+Structured error model with:
+- `error_type: ErrorType` - Enumerated error category
+- `message: str` - Human-readable description
+- `status_code: int` - HTTP status code
+- `validation_errors: list[dict]` - Pydantic validation details
+- `context: dict` - Additional debugging information
+- `traceback: str` - Optional stack trace
+
+**`SiphonServerException`**
+Client-side exception wrapping SiphonServerError for local error handling.
+
+## Usage Examples
+
+### Basic Synchronous Query
+
 ```python
-batch = BatchRequest(
-    model="gpt-oss:latest",
-    prompt_strings=[
-        "Analyze this financial report...",
-        "Summarize this research paper...",
-        "Extract key points from..."
-    ]
-)
-results = await client.query_async(batch)
-```
-
-### 3. Shared Caching Layer
-Avoid duplicate processing across teams:
-- ProcessedContent cached in PostgreSQL
-- LLM responses cached via Chain
-- Intelligent cache invalidation
-
-## Quick Start
-
-### Server Setup
-```bash
-# Install with GPU support
-pip install -e .
-
-# Configure environment
-export POSTGRES_PASSWORD="your_password"
-export OPENAI_API_KEY="your_key"  # Optional
-
-# Start server
-python server/main.py
-# Server runs on http://localhost:8080
-```
-
-### Client Usage
-```python
-from SiphonServer.client import SiphonClient
-from SiphonServer.server.api.requests import SyntheticDataRequest
-from Siphon.data.URI import URI
-from Siphon.data.Context import Context
+from siphonserver.client.siphonclient import SiphonClient
+from siphonserver.server.api.requests import ConduitRequest
 
 client = SiphonClient()
 
-# Process content remotely
-uri = URI.from_source("quarterly-report.pdf")
+# Create request
+request = ConduitRequest.from_query_input(
+    model="llama3.1:latest",
+    query_input="Explain quantum entanglement in simple terms"
+)
+
+# Execute query
+response = client.query_sync(request)
+print(response.content)
+```
+
+### Async Batch Processing
+
+```python
+from siphonserver.client.siphonclient import SiphonClient
+from siphonserver.server.api.requests import BatchRequest
+
+client = SiphonClient()
+
+# Multiple independent prompts
+batch = BatchRequest(
+    model="gpt-oss:latest",
+    prompt_strings=[
+        "What is photosynthesis?",
+        "Explain machine learning.",
+        "Describe the water cycle."
+    ]
+)
+
+results = client.query_async(batch)
+for result in results:
+    if isinstance(result, ConduitResponse):
+        print(result.content)
+```
+
+### Synthetic Data Generation
+
+```python
+from siphonserver.client.siphonclient import SiphonClient
+from siphonserver.server.api.requests import SyntheticDataRequest
+from siphon.data.URI import URI
+from siphon.data.Context import Context
+from pathlib import Path
+
+client = SiphonClient()
+
+# Create context from file
+uri = URI.from_source(Path("document.pdf"))
 context = Context.from_uri(uri)
-request = SyntheticDataRequest(context=context, model="llama3.3:latest")
+
+# Generate synthetic data
+request = SyntheticDataRequest(
+    context=context,
+    model="gemini2.5"
+)
 
 synthetic_data = client.generate_synthetic_data(request)
 print(f"Title: {synthetic_data.title}")
 print(f"Summary: {synthetic_data.summary}")
-```
-
-## API Endpoints
-
-### Status & Health
-```
-GET /status
-```
-Returns server status, available models, GPU status, and uptime.
-
-### Chain Processing
-```
-POST /chain/sync      # Single synchronous request
-POST /chain/async     # Batch asynchronous processing
-```
-
-### Siphon Operations
-```
-POST /siphon/synthetic_data    # Generate titles, summaries, descriptions
-```
-
-## Relationship to Core Projects
-
-### Siphon Integration
-- **Input:** Uses Siphon's `Context` objects for universal content format
-- **Output:** Returns Siphon's `SyntheticData` objects
-- **Cache:** Leverages Siphon's PostgreSQL caching system
-
-### Chain Integration  
-- **Models:** All Chain-supported models available (Ollama, OpenAI, etc.)
-- **Processing:** Chain's async capabilities for batch operations
-- **Caching:** Chain's response caching prevents duplicate LLM calls
-
-### When to Use SiphonServer vs. Direct Libraries
-
-**Use SiphonServer when:**
-- Processing large batches (>10 documents)
-- Need GPU acceleration but lack local GPU
-- Want shared caching across team/organization
-- Building web applications that need async processing
-
-**Use direct libraries when:**
-- Single document processing
-- Privacy-sensitive content (process locally)
-- No network connectivity
-- Simple automation scripts
-
-## Performance Features
-
-### GPU Acceleration
-- Automatic GPU detection and utilization
-- CUDA support for compatible models
-- Graceful fallback to CPU processing
-
-### Batch Optimization
-```python
-# Process 50 summaries in parallel
-batch = BatchRequest(
-    model="cogito:32b",
-    prompt_strings=document_prompts  # List of 50 strings
-)
-results = await client.query_async(batch)  # ~10x faster than sequential
-```
-
-### Intelligent Caching
-- Content-aware deduplication
-- PostgreSQL full-text search
-- Automatic cache warming for common operations
-
-## Error Handling & Monitoring
-
-### Structured Error Responses
-```python
-try:
-    result = client.generate_synthetic_data(request)
-except SiphonServerException as e:
-    print(f"Server error: {e.server_error.error_type}")
-    print(f"Message: {e.server_error.message}")
-    print(f"Request ID: {e.server_error.request_id}")
-```
-
-### Observability
-- Comprehensive request/response logging
-- Performance metrics per model
-- Cache hit/miss statistics
-- GPU utilization tracking
-
-## Production Deployment
-
-### Docker Setup
-```dockerfile
-FROM nvidia/cuda:12.1-runtime-ubuntu22.04
-# ... GPU-enabled container setup
-```
-
-### Environment Configuration
-```bash
-# Required
-POSTGRES_PASSWORD=your_secure_password
-
-# Optional - enables cloud models
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-
-# Performance tuning
-MAX_BATCH_SIZE=50
-WORKER_PROCESSES=4
-GPU_MEMORY_FRACTION=0.8
-```
-
-### Security Considerations
-- No data persistence beyond caching
-- Request-scoped logging with IDs
-- Configurable model access controls
-- Network isolation for sensitive deployments
-
-## Development & Evaluation
-
-### Model Performance Testing
-```bash
-# Benchmark all available models
-python eval/timing.py
-
-# Generate evaluation dataset
-python eval/candidate_summaries.py
-
-# Run quality assessments
-python eval/eval.py
-```
-
-### Custom Model Integration
-Add new model providers by extending Chain's model system - SiphonServer automatically inherits new capabilities.
-
-## Contributing
-
-SiphonServer is designed as infrastructure - focus areas:
-
-1. **Performance optimization** - Batch processing, GPU utilization
-2. **Monitoring & observability** - Better metrics and alerting  
-3. **Model support** - Integration with new LLM providers
-4. **Deployment automation** - Kubernetes, Docker Compose setups
-
-## License
-
-MIT License - Same as Siphon and Chain
-
----
-
-*Transform any content into structured knowledge at scale. GPU-accelerated processing for the agent future.*
-
-**Ready to scale your knowledge pipeline?**
-
-```bash
-pip install -e .
-python server/main.py
-# Your team's content processing hub is ready
+print(f"Description: {synthetic_data.description}")
 ```
