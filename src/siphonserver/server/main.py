@@ -190,7 +190,7 @@ async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
 @app.post("/curator/curate")
 async def curate(request: CuratorRequest) -> CuratorResponse:
     """Curate items based on the provided request"""
-    return curate_service(request)
+    return await curate_service(request)
 
 
 # Error handlers

@@ -106,7 +106,7 @@ def test_generate_embeddings():
         metadatas=[{}, {}],
     )
 
-    request = Embeddi_ngsRequest(
+    request = EmbeddingsRequest(
         model=model,
         batch=batch,
     )
