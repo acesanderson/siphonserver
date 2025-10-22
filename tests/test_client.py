@@ -106,7 +106,7 @@ def test_generate_embeddings():
         metadatas=[{}, {}],
     )
 
-    request = EmbeddingsRequest(
+    request = Embeddi_ngsRequest(
         model=model,
         batch=batch,
     )
@@ -115,6 +115,28 @@ def test_generate_embeddings():
         response = client.generate_embeddings(request)
         print(json.dumps(response.model_dump(), indent=2))
         logger.info("Embeddings generated successfully.")
+    except requests.exceptions.HTTPError as e:
+        logger.warning(f"HTTP Error: {e}")
+    except Exception as e:
+        logger.warning(f"Error: {e}")
+
+
+def test_curator():
+    logger.info("Testing curator service...")
+    from siphonserver.server.api.requests import CuratorRequest
+
+    params = {
+        "query_string": "machine learning applications",
+        "k": 3,
+        "n_items": 5,
+        "model": "bge",
+        "cached": True,
+    }
+    request = CuratorRequest(**params)
+    try:
+        response = client.curate(request)
+        print(json.dumps(response.model_dump(), indent=2))
+        logger.info("Curator service tested successfully.")
     except requests.exceptions.HTTPError as e:
         logger.warning(f"HTTP Error: {e}")
     except Exception as e:

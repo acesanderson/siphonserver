@@ -3,11 +3,13 @@ from siphonserver.server.api.requests import (
     BatchRequest,
     SyntheticDataRequest,
     EmbeddingsRequest,
+    CuratorRequest,
 )
 from siphonserver.server.api.responses import (
     ConduitResponse,
     ConduitError,
     EmbeddingsResponse,
+    CuratorResponse,
 )
 from siphon.synthetic_data.synthetic_data_classes import (
     SyntheticData,
@@ -212,3 +214,14 @@ class SiphonClient:
 
         except Exception as e:
             return ConduitError.model_validate_json(response.text)
+
+    def curate(self, request: CuratorRequest) -> CuratorResponse:
+        """
+        Curate items using the server.
+        """
+        response = requests.post(
+            f"{self.base_url}/curator/curate",
+            json=request.model_dump(),
+        )
+        response.raise_for_status()
+        return CuratorResponse.model_validate_json(response.text)

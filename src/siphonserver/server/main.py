@@ -21,12 +21,14 @@ from siphonserver.server.api.requests import (
     BatchRequest,
     SyntheticDataRequest,
     EmbeddingsRequest,
+    CuratorRequest,
 )
 from siphonserver.server.api.responses import (
     StatusResponse,
     ConduitResponse,
     ConduitError,
     EmbeddingsResponse,
+    CuratorResponse,
 )
 
 ## Utils
@@ -39,6 +41,7 @@ from siphonserver.server.services.conduit_async import conduit_async_service
 from siphonserver.server.services.conduit_sync import conduit_sync_service
 from siphonserver.server.services.generate_synthetic_data import generate_synthetic_data
 from siphonserver.server.services.generate_embeddings import generate_embeddings_service
+from siphonserver.server.services.curator import curate_service
 
 # Response/request models
 from conduit.batch import ModelAsync, ConduitCache
@@ -182,6 +185,12 @@ async def siphon_synthetic_data(request: SyntheticDataRequest):
 async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
     """Generate synthetic data with structured error handling"""
     return await generate_embeddings_service(request)
+
+
+@app.post("/curator/curate")
+async def curate(request: CuratorRequest) -> CuratorResponse:
+    """Curate items based on the provided request"""
+    return curate_service(request)
 
 
 # Error handlers
