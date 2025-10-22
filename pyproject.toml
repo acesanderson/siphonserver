@@ -9,6 +9,7 @@ description = "Add your description here"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.116.1",
+    "mentor",
     "psycopg2-binary>=2.9.10",
     "pytest>=8.4.1",
     "rich>=14.1.0",
@@ -34,6 +35,7 @@ log_cli_level = "INFO"
 [tool.uv.sources]
 siphon = { path = "../siphon-project", editable = true }
 conduit = { path = "../conduit-project", editable = true }
+mentor = { path = "../mentor-project", editable = true }
 
 # ─ entry points ────────────────────────────────────────────────────────────────
 [project.scripts]

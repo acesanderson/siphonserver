@@ -83,9 +83,32 @@ class EmbeddingsRequest(BaseModel):
     )
 
 
+class CuratorRequest(BaseModel):
+    """
+    query_string: str,
+    k: int = 5,
+    n_results: int = 30,
+    model_name: str = "bge",
+    cached=True,
+    """
+
+    # Mandatory fields
+    query_string: str = Field(..., description="The query string for retrieval.")
+    # Optional fields with defaults
+    k: int = Field(default=5, description="Number of top documents to retrieve.")
+    n_results: int = Field(
+        default=30, description="Total number of results to consider."
+    )
+    model_name: str = Field(
+        default="bge", description="The embedding model to use for retrieval."
+    )
+    cached: bool = Field(default=True, description="Whether to use cached results.")
+
+
 Requests = {
     "ConduitRequest": ConduitRequest,
     "BatchRequest": BatchRequest,
     "SiphonSyntheticDataRequest": SyntheticDataRequest,
     "EmbeddingsRequest": EmbeddingsRequest,
+    "CuratorRequest": CuratorRequest,
 }
