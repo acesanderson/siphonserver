@@ -53,7 +53,7 @@ def test_query_async_prompt_strings():
         "What are the benefits of meditation?",
     ]
     message = TextMessage(role="user", content="Please answer the following questions:")
-    model = "gpt-oss:latest"
+    model = "llama3.1:latest"
     request = BatchRequest(
         messages=[message],
         model=model,
