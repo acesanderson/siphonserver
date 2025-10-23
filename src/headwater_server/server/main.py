@@ -16,14 +16,12 @@ import json
 
 # Project Imports
 ## Models
-from siphonserver.server.api.requests import (
+from headwater_api.classes import (
     ConduitRequest,
     BatchRequest,
     SyntheticDataRequest,
     EmbeddingsRequest,
     CuratorRequest,
-)
-from siphonserver.server.api.responses import (
     StatusResponse,
     ConduitResponse,
     ConduitError,
@@ -32,22 +30,32 @@ from siphonserver.server.api.responses import (
 )
 
 ## Utils
-from siphonserver.server.utils.exceptions import SiphonServerError, ErrorType
-from siphonserver.server.utils.logging_config import configure_logging
+from headwater_api.classes.server import SiphonServerError, ErrorType
 
 ## Services
-from siphonserver.server.services.get_status import get_status_service
-from siphonserver.server.services.conduit_async import conduit_async_service
-from siphonserver.server.services.conduit_sync import conduit_sync_service
-from siphonserver.server.services.generate_synthetic_data import generate_synthetic_data
-from siphonserver.server.services.generate_embeddings import generate_embeddings_service
-from siphonserver.server.services.curator import curate_service
+from headwater_server.server.services.get_status import get_status_service
+from headwater_server.server.services.conduit_async import conduit_async_service
+from headwater_server.server.services.conduit_sync import conduit_sync_service
+from headwater_server.server.services.generate_synthetic_data import (
+    generate_synthetic_data,
+)
+from headwater_server.server.services.generate_embeddings import (
+    generate_embeddings_service,
+)
+from headwater_server.curator_service.curate_service import curate_service
 
-# Response/request models
+
 from conduit.batch import ModelAsync, ConduitCache
+import logging
+import os
 
-# Setup logging
-logger = configure_logging()
+# Set up logging
+log_level = int(os.getenv("PYTHON_LOG_LEVEL", "2"))  # Default to INFO
+levels = {1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
+logging.basicConfig(
+    level=levels.get(log_level, logging.INFO), format="%(levelname)s: %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 # Set up cache
 ModelAsync.conduit_cache = ConduitCache(name="siphonserver")

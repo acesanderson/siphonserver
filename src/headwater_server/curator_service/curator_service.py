@@ -1,6 +1,6 @@
-from mentor.curator.curate import CurateAsync
-from siphonserver.server.api.requests import CuratorRequest
-from siphonserver.server.api.responses import CuratorResponse, CuratorResult
+from headwater_server.curator_service.curate import CurateAsync
+from headwater_api.classes import CuratorRequest
+from headwater_api.classes import CuratorResponse, CuratorResult
 
 
 async def curate_service(request: CuratorRequest) -> CuratorResponse:
