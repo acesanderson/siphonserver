@@ -1,5 +1,8 @@
-from siphonserver.server.api.requests import EmbeddingsRequest
-from siphonserver.server.api.responses import EmbeddingsResponse
+from headwater_api.classes import EmbeddingsRequest, EmbeddingsResponse
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 async def generate_embeddings_service(
@@ -14,6 +17,8 @@ async def generate_embeddings_service(
 
     model: str = request.model
     batch: ChromaBatch = request.batch
+
+    logger.info(f"Generating embeddings using model: {model}")
 
     if batch.embeddings:
         raise ValueError("Embeddings already exist in the provided batch.")

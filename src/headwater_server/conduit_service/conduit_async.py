@@ -1,20 +1,22 @@
-from siphonserver.server.api.requests import BatchRequest  # your class
-from conduit.conduit.async_conduit import AsyncConduit
-from conduit.model.model_async import ModelAsync
-from conduit.prompt.prompt import Prompt
-from conduit.progress.verbosity import Verbosity
-from conduit.result.result import ConduitResult
-from functools import partial
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
+from headwater_api.classes import BatchRequest, ConduitError, ConduitResponse
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 async def conduit_async_service(
     batch: BatchRequest,
-) -> list[ConduitResult]:
+) -> list[ConduitResponse | ConduitError]:
     """
     Normalize BatchRequest into a list of query_async coroutines and execute them.
     """
+    from conduit.batch import AsyncConduit, ModelAsync, Prompt, Verbosity
+    from functools import partial
+    import asyncio
+    from concurrent.futures import ThreadPoolExecutor
+
+    logger.debug(f"Received batch request: {batch}")
+
     model_str = batch.model
     prompt_str = batch.prompt_str
     input_variables_list = batch.input_variables_list
@@ -36,6 +38,9 @@ async def conduit_async_service(
             verbose=Verbosity.PROGRESS,
         )
     else:
+        logger.error(
+            "BatchRequest must contain either 'prompt_str' with 'input_variables_list' or 'prompt_strings'."
+        )
         raise ValueError(
             "BatchRequest must contain either 'prompt_str' with 'input_variables_list' or 'prompt_strings'."
         )

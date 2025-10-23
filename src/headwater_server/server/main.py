@@ -33,32 +33,29 @@ from headwater_api.classes import (
 
 
 ## Services
-# from headwater_server.server.services.conduit_async import conduit_async_service
-# from headwater_server.server.services.conduit_sync import conduit_sync_service
-# from headwater_server.server.services.generate_synthetic_data import (
+from headwater_server.conduit_service.conduit_async import conduit_async_service
+from headwater_server.conduit_service.conduit_sync import conduit_sync_service
+from headwater_server.conduit_service.generate_embeddings import (
+    generate_embeddings_service,
+)
+from headwater_server.curator_service.curator_service import curator_service
+from headwater_server.status_service.get_status import get_status_service
+# from headwater_server.siphon_service.generate_synthetic_data import (
 #     generate_synthetic_data,
 # )
-# from headwater_server.server.services.generate_embeddings import (
-#     generate_embeddings_service,
-# )
-from headwater_server.status_service.get_status import get_status_service
-from headwater_server.curator_service.curator_service import curator_service
-
 
 from conduit.batch import ModelAsync, ConduitCache
 import logging
 import os
 
-# Set up logging
+# Set up logging and cache
 log_level = int(os.getenv("PYTHON_LOG_LEVEL", "2"))  # Default to INFO
 levels = {1: logging.WARNING, 2: logging.INFO, 3: logging.DEBUG}
 logging.basicConfig(
     level=levels.get(log_level, logging.INFO), format="%(levelname)s: %(message)s"
 )
 logger = logging.getLogger(__name__)
-
-# Set up cache
-ModelAsync.conduit_cache = ConduitCache(name="siphonserver")
+ModelAsync.conduit_cache = ConduitCache(name="headwater")
 
 # Record up time
 startup_time = time.time()
@@ -105,17 +102,23 @@ async def get_status():
     return get_status_service(startup_time)
 
 
-## Conduit endpoints
-# @app.post("/conduit/sync")
-# async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
-#     return conduit_sync_service(request)
+# Conduit endpoints
+@app.post("/conduit/sync")
+async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
+    return conduit_sync_service(request)
 
 
-# @app.post("/conduit/async")
-# async def conduit_async(
-#     batch: BatchRequest,
-# ) -> list[ConduitResponse | ConduitError]:
-#     return await conduit_async_service(batch)
+@app.post("/conduit/async")
+async def conduit_async(
+    batch: BatchRequest,
+) -> list[ConduitResponse | ConduitError]:
+    return await conduit_async_service(batch)
+
+
+@app.post("/conduit/embeddings")
+async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
+    """Generate synthetic data with structured error handling"""
+    return await generate_embeddings_service(request)
 
 
 ## Siphon endpoint
@@ -190,12 +193,6 @@ async def get_status():
 #         logger.error(f"[{request_id}] Full error details: {error.model_dump_json()}")
 #
 #         raise HTTPException(status_code=500, detail=error.model_dump())
-
-
-# @app.post("/conduit/embeddings")
-# async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
-#     """Generate synthetic data with structured error handling"""
-#     return await generate_embeddings_service(request)
 
 
 @app.post("/curator/curate")
