@@ -3,7 +3,7 @@ from headwater_api.classes import CuratorRequest
 from headwater_api.classes import CuratorResponse, CuratorResult
 
 
-async def curate_service(request: CuratorRequest) -> CuratorResponse:
+async def curator_service(request: CuratorRequest) -> CuratorResponse:
     """
     Process a CuratorRequest and return the curation results.
     """

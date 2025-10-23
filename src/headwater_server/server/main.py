@@ -1,7 +1,8 @@
 """
-Main orchestrator for the Siphon & Conduit API server.
+Main orchestrator for the Headwater Server.
 """
 
+# FastAPI related imports
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
@@ -12,7 +13,6 @@ from pydantic import ValidationError
 import uvicorn
 import time
 import json
-
 
 # Project Imports
 ## Models
@@ -27,22 +27,22 @@ from headwater_api.classes import (
     ConduitError,
     EmbeddingsResponse,
     CuratorResponse,
+    HeadwaterServerError,
+    ErrorType,
 )
 
-## Utils
-from headwater_api.classes.server import SiphonServerError, ErrorType
 
 ## Services
-from headwater_server.server.services.get_status import get_status_service
-from headwater_server.server.services.conduit_async import conduit_async_service
-from headwater_server.server.services.conduit_sync import conduit_sync_service
-from headwater_server.server.services.generate_synthetic_data import (
-    generate_synthetic_data,
-)
-from headwater_server.server.services.generate_embeddings import (
-    generate_embeddings_service,
-)
-from headwater_server.curator_service.curate_service import curate_service
+# from headwater_server.server.services.conduit_async import conduit_async_service
+# from headwater_server.server.services.conduit_sync import conduit_sync_service
+# from headwater_server.server.services.generate_synthetic_data import (
+#     generate_synthetic_data,
+# )
+# from headwater_server.server.services.generate_embeddings import (
+#     generate_embeddings_service,
+# )
+from headwater_server.status_service.get_status import get_status_service
+from headwater_server.curator_service.curator_service import curator_service
 
 
 from conduit.batch import ModelAsync, ConduitCache
@@ -60,14 +60,16 @@ logger = logging.getLogger(__name__)
 # Set up cache
 ModelAsync.conduit_cache = ConduitCache(name="siphonserver")
 
-# Add at module level
+# Record up time
 startup_time = time.time()
 
 
+# Configure server
+## Set up lifespan events
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    logger.info("🚀 SiphonServer starting up...")
+    logger.info("🚀 Headwater Server starting up...")
     logger.info("🔥 GPU acceleration enabled for local models")
     from conduit.sync import Model
 
@@ -75,18 +77,18 @@ async def lifespan(app: FastAPI):
 
     yield
     # Shutdown
-    logger.info("🛑 SiphonServer shutting down...")
+    logger.info("🛑 Headwater Server shutting down...")
 
 
-# Set up FastAPI app
+## Set up FastAPI app
 app = FastAPI(
-    title="Siphon & Conduit API Server",
+    title="Headwater API Server",
     description="Universal content ingestion and LLM processing API with GPU acceleration",
     version="1.0.0",
     lifespan=lifespan,
 )
 
-# Add CORS middleware
+## Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Configure appropriately for production
@@ -96,115 +98,116 @@ app.add_middleware(
 )
 
 
-# Status endpoint
+# Endpoints
+## Status endpoint
 @app.get("/status", response_model=StatusResponse)
 async def get_status():
     return get_status_service(startup_time)
 
 
-# Conduit endpoints
-@app.post("/conduit/sync")
-async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
-    return conduit_sync_service(request)
+## Conduit endpoints
+# @app.post("/conduit/sync")
+# async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
+#     return conduit_sync_service(request)
 
 
-@app.post("/conduit/async")
-async def conduit_async(
-    batch: BatchRequest,
-) -> list[ConduitResponse | ConduitError]:
-    return await conduit_async_service(batch)
+# @app.post("/conduit/async")
+# async def conduit_async(
+#     batch: BatchRequest,
+# ) -> list[ConduitResponse | ConduitError]:
+#     return await conduit_async_service(batch)
 
 
-# Siphon endpoint
-@app.post("/siphon/synthetic_data")
-async def siphon_synthetic_data(request: SyntheticDataRequest):
-    """Generate synthetic data with structured error handling"""
-    request_id = (
-        getattr(request.state, "request_id", "unknown")
-        if hasattr(request, "state")
-        else "unknown"
-    )
+## Siphon endpoint
+# @app.post("/siphon/synthetic_data")
+# async def siphon_synthetic_data(request: SyntheticDataRequest):
+#     """Generate synthetic data with structured error handling"""
+#     request_id = (
+#         getattr(request.state, "request_id", "unknown")
+#         if hasattr(request, "state")
+#         else "unknown"
+#     )
+#
+#     logger.info(f"[{request_id}] Received synthetic data request")
+#     logger.debug(f"[{request_id}] Request model: {request.model}")
+#     logger.debug(f"[{request_id}] Context type: {type(request.context).__name__}")
+#     logger.debug(f"[{request_id}] Context sourcetype: {request.context.sourcetype}")
+#
+#     try:
+#         # Log the context size to detect potential issues
+#         context_length = (
+#             len(request.context.context) if hasattr(request.context, "context") else 0
+#         )
+#         logger.debug(f"[{request_id}] Context length: {context_length} characters")
+#
+#         # Call the service
+#         result = await generate_synthetic_data(request)
+#
+#         logger.info(f"[{request_id}] Successfully generated synthetic data")
+#         logger.debug(
+#             f"[{request_id}] Generated title: {result.title[:50]}..."
+#             if result.title
+#             else "No title"
+#         )
+#         logger.info(result)
+#
+#         return result
+#
+#     except ValidationError as e:
+#         logger.error(f"[{request_id}] Validation error in synthetic data generation")
+#
+#         # Create structured error
+#         error = (
+#             HeadwaterServerError(
+#                 error_type=ErrorType.DATA_VALIDATION,
+#                 message="Synthetic data validation failed",
+#                 status_code=422,
+#                 request_id=request_id,
+#                 validation_errors=e.errors(),
+#                 original_exception=str(e),
+#             )
+#             .add_context("context_type", type(request.context).__name__)
+#             .add_context("model", request.model)
+#         )
+#
+#         logger.error(f"[{request_id}] Error details: {error.model_dump_json()}")
+#
+#         raise HTTPException(status_code=422, detail=error.model_dump())
+#
+#     except Exception as e:
+#         logger.error(f"[{request_id}] Unexpected error: {type(e).__name__}: {str(e)}")
+#
+#         # Create structured error
+#         error = (
+#             HeadwaterServerError.from_general_exception(
+#                 e, status_code=500, include_traceback=True
+#             )
+#             .add_context("request_id", request_id)
+#             .add_context("context_type", type(request.context).__name__)
+#             .add_context("model", request.model)
+#         )
+#
+#         logger.error(f"[{request_id}] Full error details: {error.model_dump_json()}")
+#
+#         raise HTTPException(status_code=500, detail=error.model_dump())
 
-    logger.info(f"[{request_id}] Received synthetic data request")
-    logger.debug(f"[{request_id}] Request model: {request.model}")
-    logger.debug(f"[{request_id}] Context type: {type(request.context).__name__}")
-    logger.debug(f"[{request_id}] Context sourcetype: {request.context.sourcetype}")
 
-    try:
-        # Log the context size to detect potential issues
-        context_length = (
-            len(request.context.context) if hasattr(request.context, "context") else 0
-        )
-        logger.debug(f"[{request_id}] Context length: {context_length} characters")
-
-        # Call the service
-        result = await generate_synthetic_data(request)
-
-        logger.info(f"[{request_id}] Successfully generated synthetic data")
-        logger.debug(
-            f"[{request_id}] Generated title: {result.title[:50]}..."
-            if result.title
-            else "No title"
-        )
-        logger.info(result)
-
-        return result
-
-    except ValidationError as e:
-        logger.error(f"[{request_id}] Validation error in synthetic data generation")
-
-        # Create structured error
-        error = (
-            SiphonServerError(
-                error_type=ErrorType.DATA_VALIDATION,
-                message="Synthetic data validation failed",
-                status_code=422,
-                request_id=request_id,
-                validation_errors=e.errors(),
-                original_exception=str(e),
-            )
-            .add_context("context_type", type(request.context).__name__)
-            .add_context("model", request.model)
-        )
-
-        logger.error(f"[{request_id}] Error details: {error.model_dump_json()}")
-
-        raise HTTPException(status_code=422, detail=error.model_dump())
-
-    except Exception as e:
-        logger.error(f"[{request_id}] Unexpected error: {type(e).__name__}: {str(e)}")
-
-        # Create structured error
-        error = (
-            SiphonServerError.from_general_exception(
-                e, status_code=500, include_traceback=True
-            )
-            .add_context("request_id", request_id)
-            .add_context("context_type", type(request.context).__name__)
-            .add_context("model", request.model)
-        )
-
-        logger.error(f"[{request_id}] Full error details: {error.model_dump_json()}")
-
-        raise HTTPException(status_code=500, detail=error.model_dump())
-
-
-@app.post("/conduit/embeddings")
-async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
-    """Generate synthetic data with structured error handling"""
-    return await generate_embeddings_service(request)
+# @app.post("/conduit/embeddings")
+# async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
+#     """Generate synthetic data with structured error handling"""
+#     return await generate_embeddings_service(request)
 
 
 @app.post("/curator/curate")
 async def curate(request: CuratorRequest) -> CuratorResponse:
     """Curate items based on the provided request"""
-    return await curate_service(request)
+    return await curator_service(request)
 
 
 # Error handlers
 @app.exception_handler(422)
 async def validation_error_handler(request: Request, exc: HTTPException):
-    """Enhanced 422 handler using SiphonServerError"""
+    """Enhanced 422 handler using HeadwaterServerError"""
 
     # Log request details for debugging
     try:
@@ -219,7 +222,7 @@ async def validation_error_handler(request: Request, exc: HTTPException):
         logger.error(f"Could not read request body: {e}")
 
     # Create structured error response
-    error = SiphonServerError(
+    error = HeadwaterServerError(
         error_type=ErrorType.VALIDATION_ERROR,
         message="Request validation failed",
         status_code=422,
@@ -238,9 +241,9 @@ async def validation_error_handler(request: Request, exc: HTTPException):
 async def pydantic_validation_error_handler(
     request: Request, exc: RequestValidationError
 ):
-    """Handle Pydantic validation errors with SiphonServerError"""
+    """Handle Pydantic validation errors with HeadwaterServerError"""
 
-    error = SiphonServerError.from_validation_error(
+    error = HeadwaterServerError.from_validation_error(
         exc, request, include_traceback=False
     ).add_context("error_count", len(exc.errors()))
 
@@ -253,7 +256,7 @@ async def pydantic_validation_error_handler(
 async def general_validation_error_handler(request: Request, exc: ValidationError):
     """Handle general Pydantic ValidationErrors"""
 
-    error = SiphonServerError.from_validation_error(
+    error = HeadwaterServerError.from_validation_error(
         exc, request, include_traceback=True
     )
     error.error_type = ErrorType.DATA_VALIDATION
@@ -267,7 +270,7 @@ async def general_validation_error_handler(request: Request, exc: ValidationErro
 async def general_exception_handler(request: Request, exc: Exception):
     """Catch-all exception handler"""
 
-    error = SiphonServerError.from_general_exception(
+    error = HeadwaterServerError.from_general_exception(
         exc, request, status_code=500, include_traceback=True
     )
 
@@ -278,18 +281,18 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 def main():
     """Run the Uvicorn server"""
-    from siphonserver.server.logo import print_logo
+    from headwater_server.server.logo import print_logo
 
     watch_directory = str(Path(__file__).parent.parent.parent)
 
     print_logo()
 
     uvicorn.run(
-        "siphonserver.server.main:app",
+        "headwater_server.server.main:app",
         host="0.0.0.0",
         port=8080,
         reload=True,
-        reload_dirs=[watch_directory],  # Watch the project directory for changes
+        reload_dirs=[watch_directory],
         log_level="info",
     )
 

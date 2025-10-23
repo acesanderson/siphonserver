@@ -1,9 +1,9 @@
-from siphonserver.server.api.responses import StatusResponse
+from headwater_api.classes import StatusResponse
 
 
 def get_status_service(startup_time: float) -> StatusResponse:
     try:
-        from Conduit.sync import Model, Response, Verbosity
+        from conduit.sync import Model, Response, Verbosity
         import torch
         import time
 
