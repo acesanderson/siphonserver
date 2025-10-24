@@ -1,169 +1,189 @@
-# SiphonServer
+# Headwater Server
 
-## Project Purpose
+An API server for orchestrating diverse AI operations, including text generation, embeddings, and semantic search, with GPU acceleration.
 
-SiphonServer is a FastAPI-based server that provides unified HTTP endpoints for LLM processing and synthetic data generation. It wraps two core libraries—Conduit (for LLM chain orchestration) and Siphon (for content ingestion)—exposing both synchronous and asynchronous query endpoints along with GPU-accelerated local model execution. The server handles request validation, error formatting, and caching while providing a client library for programmatic access.
+## Quick Start
 
-## Architecture Overview
+This example assumes the server is running on `localhost:8080`. Execute the following command to get a synchronous text completion from a local Ollama model.
 
-- **server.main**: FastAPI application orchestrator with lifecycle management, CORS middleware, and centralized exception handlers
-- **server.services.conduit_sync**: Synchronous LLM query processing using Conduit's Model interface
-- **server.services.conduit_async**: Asynchronous batch query processing with thread pool execution for non-blocking operations
-- **server.services.generate_synthetic_data**: Async wrapper around Siphon's synthetic data generation from context objects
-- **server.services.get_status**: Health check service reporting model availability, GPU status, and uptime
-- **server.api.requests**: Request models including ConduitRequest, BatchRequest, and SyntheticDataRequest with validation
-- **server.api.responses**: Response models wrapping Conduit results, errors, and server status
-- **server.utils.exceptions**: Structured error handling with SiphonServerError and ErrorType enumeration
-- **server.utils.logging_config**: Centralized logging configuration with per-module logger management
-- **client.siphonclient**: Python client library providing typed HTTP methods and automatic error deserialization
-- **eval**: Model evaluation suite for comparing LLM outputs against gold standards across multiple dimensions
-
-## Dependencies
-
-**Major Dependencies:**
-- `fastapi`: Web framework for API server
-- `uvicorn`: ASGI server for FastAPI
-- `pydantic`: Data validation and serialization
-- `requests`: HTTP client library
-- `torch`: PyTorch for GPU detection and acceleration
-- `pandas`: Data analysis for evaluation module
-
-**Local/Internal Dependencies:**
-- `conduit`: LLM chain orchestration library (sync/async models, prompts, parsers, caching)
-- `siphon`: Content ingestion and synthetic data generation library
-- `dbclients`: Database client utilities providing network context
-
-## API Documentation
-
-### SiphonClient
-
-**`__init__(base_url: str = "")`**
-Initialize client with optional custom base URL. Defaults to network context configuration.
-
-**`get_status() -> dict`**
-Retrieve server health status including available models, GPU state, and uptime.
-
-**`query_sync(request: ConduitRequest) -> ConduitResponse | ConduitError`**
-Execute synchronous LLM query. Returns structured response or error object.
-
-**`query_async(batch: BatchRequest) -> list[ConduitResponse | ConduitError]`**
-Execute asynchronous batch queries with multiple prompts or input variable sets.
-
-**`generate_synthetic_data(request: SyntheticDataRequest) -> SyntheticDataUnion | ConduitError`**
-Generate synthetic data (title, summary, descriptions) from context object using specified model.
-
-### Server Endpoints
-
-**`GET /status`**
-Returns StatusResponse with server health, model availability, GPU status, and uptime.
-
-**`POST /conduit/sync`**
-Accepts ConduitRequest, returns ConduitResponse or ConduitError for single LLM query.
-
-**`POST /conduit/async`**
-Accepts BatchRequest with multiple prompts or input variables, returns list of results.
-
-**`POST /siphon/synthetic_data`**
-Accepts SyntheticDataRequest with context object, returns SyntheticData subclass matching source type.
-
-### Request Models
-
-**`ConduitRequest`**
-- `model: str` - Model identifier (e.g., "llama3.1:latest", "gpt-oss:latest")
-- `prompt_str: str` - Template string or direct prompt
-- `input_variables: dict[str, str]` - Variables for template rendering
-
-**`BatchRequest(ConduitRequest)`**
-- `prompt_strings: list[str]` - Multiple fully-rendered prompts
-- `input_variables_list: list[dict[str, str]]` - Multiple variable sets for single template
-- Validates exactly one of prompt_strings or input_variables_list is provided
-
-**`SyntheticDataRequest`**
-- `context: ContextUnion` - Siphon context object (file, URL, database record)
-- `model: str` - Model to use for generation (default: "gemini2.5")
-
-### Error Handling
-
-**`SiphonServerError`**
-Structured error model with:
-- `error_type: ErrorType` - Enumerated error category
-- `message: str` - Human-readable description
-- `status_code: int` - HTTP status code
-- `validation_errors: list[dict]` - Pydantic validation details
-- `context: dict` - Additional debugging information
-- `traceback: str` - Optional stack trace
-
-**`SiphonServerException`**
-Client-side exception wrapping SiphonServerError for local error handling.
-
-## Usage Examples
-
-### Basic Synchronous Query
-
-```python
-from siphonserver.client.siphonclient import SiphonClient
-from siphonserver.server.api.requests import ConduitRequest
-
-client = SiphonClient()
-
-# Create request
-request = ConduitRequest.from_query_input(
-    model="llama3.1:latest",
-    query_input="Explain quantum entanglement in simple terms"
-)
-
-# Execute query
-response = client.query_sync(request)
-print(response.content)
+```bash
+curl -X POST http://localhost:8080/conduit/sync \
+-H "Content-Type: application/json" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Name three species of owls native to North America."
+    }
+  ],
+  "model": "llama3.1:latest"
+}'
 ```
 
-### Async Batch Processing
+Expected Response:
 
-```python
-from siphonserver.client.siphonclient import SiphonClient
-from siphonserver.server.api.requests import BatchRequest
+```json
+{
+  "content": "Certainly! Three species of owls native to North America are:\n\n1.  **Great Horned Owl** (*Bubo virginianus*)\n2.  **Snowy Owl** (*Bubo scandiacus*)\n3.  **Barn Owl** (*Tyto alba*)",
+  "model": "llama3.1:latest",
+  "usage": {
+    "prompt_tokens": 19,
+    "completion_tokens": 64,
+    "total_tokens": 83
+  }
+}
+```
 
-client = SiphonClient()
+## Installation and Setup
 
-# Multiple independent prompts
-batch = BatchRequest(
-    model="gpt-oss:latest",
-    prompt_strings=[
-        "What is photosynthesis?",
-        "Explain machine learning.",
-        "Describe the water cycle."
+### Prerequisites
+
+-   Python 3.9+
+-   An Ollama instance running locally. See the [Ollama documentation](https://ollama.com/) for installation instructions. Ensure you have pulled a model, for example: `ollama pull llama3.1`.
+
+### Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/headwater-server-project.git
+    cd headwater-server-project
+    ```
+
+2.  **Create and activate a virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate
+    # On Windows, use: venv\Scripts\activate
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **(Optional) Configure API Keys:**
+    For services that use external rerankers (like Cohere or Jina), set the corresponding environment variables:
+    ```bash
+    export COHERE_API_KEY="your_cohere_api_key"
+    export JINA_API_KEY="your_jina_api_key"
+    ```
+
+### Running the Server
+
+Launch the server using Uvicorn:
+
+```bash
+uvicorn headwater_server.server.main:app --host 0.0.0.0 --port 8080
+```
+
+The API will be available at `http://localhost:8080`.
+
+## API Endpoints
+
+The server provides several endpoints for different AI tasks.
+
+### Text Generation (Conduit)
+
+These endpoints interface with LLMs for text generation tasks.
+
+#### `POST /conduit/sync`
+
+Processes a single, synchronous request to an LLM.
+
+**Example:**
+```bash
+curl -X POST http://localhost:8080/conduit/sync \
+-H "Content-Type: application/json" \
+-d '{
+  "messages": [{"role": "user", "content": "name three birds"}],
+  "model": "llama3.1:latest"
+}'
+```
+
+#### `POST /conduit/async`
+
+Processes a batch of prompts asynchronously. This is efficient for running multiple prompts against the same model, especially using a prompt template.
+
+**Example:**
+This request uses a single prompt template (`"Name 3 {things}."`) and applies it to a list of different inputs.
+
+```bash
+curl -X POST http://localhost:8080/conduit/async \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "llama3.1:latest",
+  "input_variables_list": [
+    {"things": "countries in Africa"},
+    {"things": "programming languages"},
+    {"things": "biological processes"}
+  ],
+  "prompt_str": "Name 3 {things}."
+}'
+```
+
+### Embeddings
+
+#### `POST /conduit/embeddings`
+
+Generates vector embeddings for a batch of documents using a specified sentence-transformer model.
+
+**Example:**
+```bash
+curl -X POST http://localhost:8080/conduit/embeddings \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "sentence-transformers/all-mpnet-base-v2",
+  "batch": {
+    "ids": ["doc1", "doc2"],
+    "documents": [
+      "Headwater Server provides robust API endpoints.",
+      "Vector embeddings are useful for semantic search."
     ]
-)
-
-results = client.query_async(batch)
-for result in results:
-    if isinstance(result, ConduitResponse):
-        print(result.content)
+  }
+}'
 ```
 
-### Synthetic Data Generation
+### Semantic Search (Curator)
 
-```python
-from siphonserver.client.siphonclient import SiphonClient
-from siphonserver.server.api.requests import SyntheticDataRequest
-from siphon.data.URI import URI
-from siphon.data.Context import Context
-from pathlib import Path
+#### `POST /curator/curate`
 
-client = SiphonClient()
+Performs semantic search. It takes a user query, retrieves a set of candidate documents from a vector store, and uses a reranker model to provide the most relevant results.
 
-# Create context from file
-uri = URI.from_source(Path("document.pdf"))
-context = Context.from_uri(uri)
+**Example:**
+```bash
+curl -X POST http://localhost:8080/curator/curate \
+-H "Content-Type: application/json" \
+-d '{
+  "query_string": "strategies for pivoting your career",
+  "k": 3,
+  "n_results": 20,
+  "model_name": "bge",
+  "cached": true
+}'
+```
 
-# Generate synthetic data
-request = SyntheticDataRequest(
-    context=context,
-    model="gemini2.5"
-)
+### Server Status
 
-synthetic_data = client.generate_synthetic_data(request)
-print(f"Title: {synthetic_data.title}")
-print(f"Summary: {synthetic_data.summary}")
-print(f"Description: {synthetic_data.description}")
+#### `GET /status`
+
+Provides a health check and information about the server, including GPU status and available local models.
+
+**Example:**
+```bash
+curl http://localhost:8080/status
+```
+
+**Expected Response:**
+```json
+{
+  "status": "healthy",
+  "gpu_enabled": true,
+  "message": "Server is running",
+  "models_available": [
+    "llama3.1:latest",
+    "codegemma:latest",
+    "mixtral:latest"
+  ],
+  "uptime": 1234.56
+}
 ```

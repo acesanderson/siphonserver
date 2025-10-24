@@ -23,6 +23,7 @@ from headwater_api.classes import (
     EmbeddingsRequest,
     CuratorRequest,
     StatusResponse,
+    PingResponse,
     ConduitResponse,
     BatchResponse,
     ConduitError,
@@ -103,21 +104,27 @@ async def get_status():
     return get_status_service(startup_time)
 
 
+@app.get("/ping", response_model=PingResponse)
+async def ping():
+    """Simple endpoint to check if the server is reachable."""
+    return {"message": "pong"}
+
+
 # Conduit endpoints
-@app.post("/conduit/sync")
-def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
+@app.post("/conduit/sync", response_model=ConduitResponse | ConduitError)
+def conduit_sync(request: ConduitRequest):
     return conduit_sync_service(request)
 
 
-@app.post("/conduit/async")
+@app.post("/conduit/async", response_model=BatchResponse)
 async def conduit_async(
     batch: BatchRequest,
 ) -> BatchResponse:
     return await conduit_async_service(batch)
 
 
-@app.post("/conduit/embeddings")
-async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
+@app.post("/conduit/embeddings", response_model=EmbeddingsResponse)
+async def generate_embeddings(request: EmbeddingsRequest):
     """Generate synthetic data with structured error handling"""
     return await generate_embeddings_service(request)
 
@@ -196,8 +203,8 @@ async def generate_embeddings(request: EmbeddingsRequest) -> EmbeddingsResponse:
 #         raise HTTPException(status_code=500, detail=error.model_dump())
 
 
-@app.post("/curator/curate")
-async def curate(request: CuratorRequest) -> CuratorResponse:
+@app.post("/curator/curate", response_model=CuratorResponse)
+async def curate(request: CuratorRequest):
     """Curate items based on the provided request"""
     return await curator_service(request)
 
