@@ -24,6 +24,7 @@ from headwater_api.classes import (
     CuratorRequest,
     StatusResponse,
     ConduitResponse,
+    BatchResponse,
     ConduitError,
     EmbeddingsResponse,
     CuratorResponse,
@@ -33,9 +34,9 @@ from headwater_api.classes import (
 
 
 ## Services
-from headwater_server.conduit_service.conduit_async import conduit_async_service
+from headwater_server.conduit_service.conduit_async_service import conduit_async_service
 from headwater_server.conduit_service.conduit_sync import conduit_sync_service
-from headwater_server.conduit_service.generate_embeddings import (
+from headwater_server.embeddings_service.embeddings_service import (
     generate_embeddings_service,
 )
 from headwater_server.curator_service.curator_service import curator_service
@@ -111,7 +112,7 @@ async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitErro
 @app.post("/conduit/async")
 async def conduit_async(
     batch: BatchRequest,
-) -> list[ConduitResponse | ConduitError]:
+) -> BatchResponse:
     return await conduit_async_service(batch)
 
 

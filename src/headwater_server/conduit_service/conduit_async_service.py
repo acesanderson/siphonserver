@@ -1,4 +1,7 @@
-from headwater_api.classes import BatchRequest, ConduitError, ConduitResponse
+from headwater_api.classes import (
+    BatchRequest,
+    BatchResponse,
+)
 import logging
 
 logger = logging.getLogger(__name__)
@@ -6,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 async def conduit_async_service(
     batch: BatchRequest,
-) -> list[ConduitResponse | ConduitError]:
+) -> BatchResponse:
     """
     Normalize BatchRequest into a list of query_async coroutines and execute them.
     """
@@ -53,5 +56,5 @@ async def conduit_async_service(
             executor,
             func_for_executor,
         )
-
-    return results
+    batch_response = BatchResponse(results=results)
+    return batch_response
