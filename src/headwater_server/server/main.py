@@ -35,7 +35,7 @@ from headwater_api.classes import (
 
 ## Services
 from headwater_server.conduit_service.conduit_async_service import conduit_async_service
-from headwater_server.conduit_service.conduit_sync import conduit_sync_service
+from headwater_server.conduit_service.conduit_sync_service import conduit_sync_service
 from headwater_server.embeddings_service.embeddings_service import (
     generate_embeddings_service,
 )
@@ -105,7 +105,7 @@ async def get_status():
 
 # Conduit endpoints
 @app.post("/conduit/sync")
-async def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
+def conduit_sync(request: ConduitRequest) -> ConduitResponse | ConduitError:
     return conduit_sync_service(request)
 
 
