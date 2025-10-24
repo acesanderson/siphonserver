@@ -17,6 +17,7 @@ dependencies = [
     "uvicorn",
     "conduit",
     "siphon",
+    "pytest-asyncio>=1.2.0",
 ]
 
 # ── Hatchling (build) ──────────────────────────────────────────────────────────

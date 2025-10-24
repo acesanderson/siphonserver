@@ -12,8 +12,8 @@ async def generate_embeddings_service(
     Generate embeddings for a batch of documents based on the provided request.
     This function simulates the generation of embeddings using a specified model.
     """
-    from conduit.embeddings.embedding_model import EmbeddingModel
-    from conduit.embeddings.chroma_batch import ChromaBatch
+    from headwater_server.embeddings_service.embedding_model import EmbeddingModel
+    from headwater_api.classes import ChromaBatch
 
     model: str = request.model
     batch: ChromaBatch = request.batch

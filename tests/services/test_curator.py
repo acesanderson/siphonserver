@@ -1,8 +1,19 @@
-from headwater_server.curator_service.curate import Curate
+import pytest
+from headwater_server.curator_service.curator_service import curator_service
+from headwater_api.classes import CuratorRequest
 
-if __name__ == "__main__":
+
+@pytest.mark.asyncio
+async def test_curator_service():
+    curator_request = CuratorRequest(
+        query_string="pivoting your career",
+        k=5,
+        n_results=30,
+        model_name="bge",
+        cached=True,
+    )
     # Test the Curate function
-    query = "Introduction to Machine Learning"
-    results = Curate(query, k=5, n_results=20, model_name="bge", cached=True)
-    for title, score in results:
-        print(f"{title}: {score:.4f}")
+    response = await curator_service(curator_request)
+    results = response.results
+    for result in results:
+        print(f"{result.id}: {result.score:.4f}")
