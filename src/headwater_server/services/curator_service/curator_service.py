@@ -1,4 +1,4 @@
-from headwater_server.curator_service.curate import CurateAsync
+from headwater_server.services.curator_service.curate import CurateAsync
 from headwater_api.classes import CuratorRequest
 from headwater_api.classes import CuratorResponse, CuratorResult
 

@@ -1,5 +1,5 @@
 import pytest
-from headwater_server.curator_service.curator_service import curator_service
+from headwater_server.services.curator_service.curator_service import curator_service
 from headwater_api.classes import CuratorRequest
 
 

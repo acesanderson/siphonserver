@@ -5,7 +5,9 @@ from headwater_api.classes import (
     ConduitResponse,
     ConduitError,
 )
-from headwater_server.conduit_service.conduit_async_service import conduit_async_service
+from headwater_server.services.conduit_service.conduit_async_service import (
+    conduit_async_service,
+)
 
 
 @pytest.mark.asyncio

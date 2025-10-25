@@ -1,5 +1,7 @@
 from headwater_api.classes import ConduitRequest, ConduitResponse
-from headwater_server.conduit_service.conduit_sync_service import conduit_sync_service
+from headwater_server.services.conduit_service.conduit_sync_service import (
+    conduit_sync_service,
+)
 from conduit.message.textmessage import TextMessage
 
 

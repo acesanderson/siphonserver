@@ -1,4 +1,4 @@
-from headwater_server.siphon_service.generate_synthetic_data import (
+from headwater_server.services.siphon_service.generate_synthetic_data import (
     generate_synthetic_data,
 )
 from headwater_api.classes import SyntheticData, SyntheticDataRequest

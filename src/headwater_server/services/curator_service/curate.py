@@ -2,8 +2,11 @@ from kramer.database.Chroma_curate import (
     query_course_descriptions_sync,
     query_course_descriptions,
 )  # The latter is async
-from headwater_server.curator_service.rerank import rerank_options, rerank_options_async
-from headwater_server.curator_service.cache.cache import (
+from headwater_server.services.curator_service.rerank import (
+    rerank_options,
+    rerank_options_async,
+)
+from headwater_server.services.curator_service.cache.cache import (
     CuratorCache,
     CachedQuery,
     CachedResponse,
