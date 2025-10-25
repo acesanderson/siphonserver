@@ -35,16 +35,20 @@ from headwater_api.classes import (
 
 
 ## Services
-from headwater_server.conduit_service.conduit_async_service import conduit_async_service
-from headwater_server.conduit_service.conduit_sync_service import conduit_sync_service
-from headwater_server.embeddings_service.embeddings_service import (
+from headwater_server.services.conduit_service.conduit_async_service import (
+    conduit_async_service,
+)
+from headwater_server.services.conduit_service.conduit_sync_service import (
+    conduit_sync_service,
+)
+from headwater_server.services.embeddings_service.embeddings_service import (
     generate_embeddings_service,
 )
-from headwater_server.curator_service.curator_service import curator_service
-from headwater_server.status_service.get_status import get_status_service
-# from headwater_server.siphon_service.generate_synthetic_data import (
-#     generate_synthetic_data,
-# )
+from headwater_server.services.curator_service.curator_service import curator_service
+from headwater_server.services.status_service.get_status import get_status_service
+from headwater_server.services.siphon_service.generate_synthetic_data import (
+    generate_synthetic_data,
+)
 
 from conduit.batch import ModelAsync, ConduitCache
 import logging
@@ -129,78 +133,78 @@ async def generate_embeddings(request: EmbeddingsRequest):
     return await generate_embeddings_service(request)
 
 
-## Siphon endpoint
-# @app.post("/siphon/synthetic_data")
-# async def siphon_synthetic_data(request: SyntheticDataRequest):
-#     """Generate synthetic data with structured error handling"""
-#     request_id = (
-#         getattr(request.state, "request_id", "unknown")
-#         if hasattr(request, "state")
-#         else "unknown"
-#     )
-#
-#     logger.info(f"[{request_id}] Received synthetic data request")
-#     logger.debug(f"[{request_id}] Request model: {request.model}")
-#     logger.debug(f"[{request_id}] Context type: {type(request.context).__name__}")
-#     logger.debug(f"[{request_id}] Context sourcetype: {request.context.sourcetype}")
-#
-#     try:
-#         # Log the context size to detect potential issues
-#         context_length = (
-#             len(request.context.context) if hasattr(request.context, "context") else 0
-#         )
-#         logger.debug(f"[{request_id}] Context length: {context_length} characters")
-#
-#         # Call the service
-#         result = await generate_synthetic_data(request)
-#
-#         logger.info(f"[{request_id}] Successfully generated synthetic data")
-#         logger.debug(
-#             f"[{request_id}] Generated title: {result.title[:50]}..."
-#             if result.title
-#             else "No title"
-#         )
-#         logger.info(result)
-#
-#         return result
-#
-#     except ValidationError as e:
-#         logger.error(f"[{request_id}] Validation error in synthetic data generation")
-#
-#         # Create structured error
-#         error = (
-#             HeadwaterServerError(
-#                 error_type=ErrorType.DATA_VALIDATION,
-#                 message="Synthetic data validation failed",
-#                 status_code=422,
-#                 request_id=request_id,
-#                 validation_errors=e.errors(),
-#                 original_exception=str(e),
-#             )
-#             .add_context("context_type", type(request.context).__name__)
-#             .add_context("model", request.model)
-#         )
-#
-#         logger.error(f"[{request_id}] Error details: {error.model_dump_json()}")
-#
-#         raise HTTPException(status_code=422, detail=error.model_dump())
-#
-#     except Exception as e:
-#         logger.error(f"[{request_id}] Unexpected error: {type(e).__name__}: {str(e)}")
-#
-#         # Create structured error
-#         error = (
-#             HeadwaterServerError.from_general_exception(
-#                 e, status_code=500, include_traceback=True
-#             )
-#             .add_context("request_id", request_id)
-#             .add_context("context_type", type(request.context).__name__)
-#             .add_context("model", request.model)
-#         )
-#
-#         logger.error(f"[{request_id}] Full error details: {error.model_dump_json()}")
-#
-#         raise HTTPException(status_code=500, detail=error.model_dump())
+# Siphon endpoint
+@app.post("/siphon/synthetic_data")
+def siphon_synthetic_data(request: SyntheticDataRequest):
+    """Generate synthetic data with structured error handling"""
+    request_id = (
+        getattr(request.state, "request_id", "unknown")
+        if hasattr(request, "state")
+        else "unknown"
+    )
+
+    logger.info(f"[{request_id}] Received synthetic data request")
+    logger.debug(f"[{request_id}] Request model: {request.model}")
+    logger.debug(f"[{request_id}] Context type: {type(request.context).__name__}")
+    logger.debug(f"[{request_id}] Context sourcetype: {request.context.sourcetype}")
+
+    try:
+        # Log the context size to detect potential issues
+        context_length = (
+            len(request.context.context) if hasattr(request.context, "context") else 0
+        )
+        logger.debug(f"[{request_id}] Context length: {context_length} characters")
+
+        # Call the service
+        result = generate_synthetic_data(request)
+
+        logger.info(f"[{request_id}] Successfully generated synthetic data")
+        logger.debug(
+            f"[{request_id}] Generated title: {result.title[:50]}..."
+            if result.title
+            else "No title"
+        )
+        logger.info(result)
+
+        return result
+
+    except ValidationError as e:
+        logger.error(f"[{request_id}] Validation error in synthetic data generation")
+
+        # Create structured error
+        error = (
+            HeadwaterServerError(
+                error_type=ErrorType.DATA_VALIDATION,
+                message="Synthetic data validation failed",
+                status_code=422,
+                request_id=request_id,
+                validation_errors=e.errors(),
+                original_exception=str(e),
+            )
+            .add_context("context_type", type(request.context).__name__)
+            .add_context("model", request.model)
+        )
+
+        logger.error(f"[{request_id}] Error details: {error.model_dump_json()}")
+
+        raise HTTPException(status_code=422, detail=error.model_dump())
+
+    except Exception as e:
+        logger.error(f"[{request_id}] Unexpected error: {type(e).__name__}: {str(e)}")
+
+        # Create structured error
+        error = (
+            HeadwaterServerError.from_general_exception(
+                e, status_code=500, include_traceback=True
+            )
+            .add_context("request_id", request_id)
+            .add_context("context_type", type(request.context).__name__)
+            .add_context("model", request.model)
+        )
+
+        logger.error(f"[{request_id}] Full error details: {error.model_dump_json()}")
+
+        raise HTTPException(status_code=500, detail=error.model_dump())
 
 
 @app.post("/curator/curate", response_model=CuratorResponse)
