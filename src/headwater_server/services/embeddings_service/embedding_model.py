@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from headwater_api.classes import ChromaBatch
+from headwater_api.classes import ChromaBatch, load_embedding_models
 
 _DEVICE_CACHE = None
 EMBEDDING_MODELS_FILE = Path(__file__).parent / "embedding_models.json"
@@ -20,8 +20,7 @@ class EmbeddingModel:
 
     @classmethod
     def models(cls) -> list[str]:
-        embedding_models_dict = json.loads(EMBEDDING_MODELS_FILE.read_text())
-        embedding_models: list[str] = embedding_models_dict["embedding_models"]
+        embedding_models: list[str] = load_embedding_models()
         return embedding_models
 
     @classmethod
