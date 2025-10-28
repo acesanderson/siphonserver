@@ -1,6 +1,6 @@
 def main():
     from headwater_server.server.logo import print_logo
-    from headwater_server.server.headwater_server import HeadwaterServer
+    from headwater_server.server.headwater import HeadwaterServer
     from pathlib import Path
     import uvicorn
 
@@ -8,7 +8,7 @@ def main():
     server = HeadwaterServer()
 
     uvicorn.run(
-        server.app,  # Pass the app instance directly
+        "headwater_server.server.headwater:app",
         host="0.0.0.0",
         port=8080,
         reload=True,

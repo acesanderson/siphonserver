@@ -14,17 +14,17 @@ from headwater_api.classes import (
 )
 
 
-class ConduitServerAPI:
+class EmbeddingsServerAPI:
     def __init__(self, app: FastAPI):
         self.app: FastAPI = app
 
-    def register_routes(self, app: FastAPI):
+    def register_routes(self):
         """
         Register all conduit routes
         """
 
         # Embeddings
-        @app.post("/conduit/embeddings", response_model=EmbeddingsResponse)
+        @self.app.post("/conduit/embeddings", response_model=EmbeddingsResponse)
         async def generate_embeddings(request: EmbeddingsRequest):
             """Generate synthetic data with structured error handling"""
             from headwater_server.services.embeddings_service.generate_embeddings_service import (
@@ -33,7 +33,9 @@ class ConduitServerAPI:
 
             return await generate_embeddings_service(request)
 
-        @app.post("/conduit/embeddings/quick", response_model=QuickEmbeddingResponse)
+        @self.app.post(
+            "/conduit/embeddings/quick", response_model=QuickEmbeddingResponse
+        )
         def quick_embedding(request: QuickEmbeddingRequest) -> QuickEmbeddingResponse:
             from headwater_server.services.embeddings_service.quick_embedding_service import (
                 quick_embedding_service,
@@ -42,7 +44,7 @@ class ConduitServerAPI:
             return quick_embedding_service(request)
 
         # Collections
-        @app.post(
+        @self.app.post(
             "/conduit/embeddings/collections", response_model=CreateCollectionResponse
         )
         def create_collection(
@@ -54,7 +56,7 @@ class ConduitServerAPI:
 
             return create_collection_service(request)
 
-        @app.get(
+        @self.app.get(
             "/conduit/embeddings/collections", response_model=ListCollectionsResponse
         )
         def list_collections() -> ListCollectionsResponse:
@@ -64,7 +66,7 @@ class ConduitServerAPI:
 
             return list_collections_service()
 
-        @app.delete(
+        @self.app.delete(
             "/conduit/embeddings/collections", response_model=DeleteCollectionResponse
         )
         def delete_collection(
@@ -76,7 +78,7 @@ class ConduitServerAPI:
 
             return delete_collection_service(request)
 
-        @app.post(
+        @self.app.post(
             "/conduit/embeddings/collections/query",
             response_model=QueryCollectionResponse,
         )

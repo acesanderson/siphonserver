@@ -9,14 +9,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ConduitServerAPI:
+class ErrorHandlers:
     def __init__(self, app: FastAPI):
         self.app: FastAPI = app
 
-    def register_routes(self, app: FastAPI):
+    def register_error_handlers(self):
         """Register all conduit routes"""
 
-        @app.exception_handler(422)
+        @self.app.exception_handler(422)
         async def validation_error_handler(
             request: Request, exc: HTTPException
         ) -> JSONResponse:
@@ -49,7 +49,7 @@ class ConduitServerAPI:
 
             return JSONResponse(status_code=422, content=error.model_dump())
 
-        @app.exception_handler(RequestValidationError)
+        @self.app.exception_handler(RequestValidationError)
         async def pydantic_validation_error_handler(
             request: Request, exc: RequestValidationError
         ):
@@ -63,7 +63,7 @@ class ConduitServerAPI:
 
             return JSONResponse(status_code=422, content=error.model_dump())
 
-        @app.exception_handler(ValidationError)
+        @self.app.exception_handler(ValidationError)
         async def general_validation_error_handler(
             request: Request, exc: ValidationError
         ):
@@ -78,7 +78,7 @@ class ConduitServerAPI:
 
             return JSONResponse(status_code=422, content=error.model_dump())
 
-        @app.exception_handler(Exception)
+        @self.app.exception_handler(Exception)
         async def general_exception_handler(request: Request, exc: Exception):
             """Catch-all exception handler"""
 

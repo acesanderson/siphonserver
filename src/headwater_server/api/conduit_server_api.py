@@ -12,7 +12,7 @@ class ConduitServerAPI:
     def __init__(self, app: FastAPI):
         self.app: FastAPI = app
 
-    def register_routes(self, app: FastAPI):
+    def register_routes(self):
         """
         Register all conduit routes
         """

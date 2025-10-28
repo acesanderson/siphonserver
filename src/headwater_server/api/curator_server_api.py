@@ -5,16 +5,16 @@ from headwater_api.classes import (
 )
 
 
-class ConduitServerAPI:
+class CuratorServerAPI:
     def __init__(self, app: FastAPI):
         self.app: FastAPI = app
 
-    def register_routes(self, app: FastAPI):
+    def register_routes(self):
         """
         Register all conduit routes
         """
 
-        @app.post("/curator/curate", response_model=CuratorResponse)
+        @self.app.post("/curator/curate", response_model=CuratorResponse)
         async def curate(request: CuratorRequest):
             """Curate items based on the provided request"""
             from headwater_server.services.curator_service.curator_service import (
