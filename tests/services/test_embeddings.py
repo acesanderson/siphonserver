@@ -1,6 +1,6 @@
 import pytest
 from headwater_api.classes import EmbeddingsRequest, ChromaBatch
-from headwater_server.services.embeddings_service.embeddings_service import (
+from headwater_server.services.embeddings_service.generate_embeddings_service import (
     generate_embeddings_service,
 )
 
